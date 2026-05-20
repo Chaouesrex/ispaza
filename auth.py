@@ -190,12 +190,12 @@ def save_users(users: Iterable[User], path: Path | str | None = None) -> None:
 
 
 def seed_demo_users(now: datetime | None = None) -> list[User]:
-    """One pre-baked account: ``demo`` / ``spaza2026``.
+    """One pre-baked account: ``demo`` / ``spazi2026``.
 
     Used when the JSON store is empty or unavailable so the login screen
     always has a working credential displayed under the form.
     """
-    salt, digest = hash_password("spaza2026")
+    salt, digest = hash_password("spazi2026")
     return [
         User(
             username="demo",

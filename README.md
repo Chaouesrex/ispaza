@@ -1,11 +1,11 @@
-# iSpaza — AI Advisor for Spaza Shop Owners
+# spazi shops — AI Advisor for South African Spaza Shop Owners
 
 > **Better decisions today.**
 
 A Streamlit app built for the **IEB TechWays AI Hackathon 2026** under the
 *Cross-Border Trade & Informal Economy* category.
 
-iSpaza is an end-to-end operating tool for South African spaza shop
+spazi shops is an end-to-end operating tool for South African spaza shop
 owners. The owner enters their current stock and last week's sales and
 the app delivers four things at once:
 

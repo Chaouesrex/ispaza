@@ -202,5 +202,5 @@ def test_save_users_writes_no_plaintext_password(tmp_path: Path):
 def test_seed_demo_users_creates_one_working_account():
     users = seed_demo_users()
     assert len(users) == 1
-    assert authenticate(users, "demo", "spaza2026") is not None
+    assert authenticate(users, "demo", "spazi2026") is not None
     assert authenticate(users, "demo", "wrong") is None

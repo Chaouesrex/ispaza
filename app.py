@@ -1,4 +1,4 @@
-"""iSpaza — AI Advisor for Spaza Shop Owners.
+"""spazi shops — AI Advisor for South African Spaza Shop Owners.
 
 Streamlit app for the IEB TechWays AI Hackathon 2026.
 
@@ -86,219 +86,393 @@ from tracker import (
 # ---------------------------------------------------------------------------
 
 st.set_page_config(
-    page_title="iSpaza",
+    page_title="spazi shops",
     page_icon="🛒",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-PRIMARY_GREEN = "#006B3C"
-ACCENT_YELLOW = "#FFB81C"
-SOFT_BG = "#F4F6F2"
-DEEP_GREEN = "#004F2C"
+# ---------------------------------------------------------------------------
+# Design tokens — refined palette: deeper greens, warmer neutrals, soft gold
+# ---------------------------------------------------------------------------
+PRIMARY_GREEN = "#0E6E4A"
+DEEP_GREEN = "#0A4A33"
+LEAF_GREEN = "#14916A"
+ACCENT_GOLD = "#E4A82C"
+ACCENT_GOLD_SOFT = "#FFE9B3"
+CREAM_BG = "#FAF7F0"
+SAND_BG = "#F1ECDE"
+INK = "#152A1F"
+MUTED = "#6B7A70"
+CARD_BG = "#FFFFFF"
 
 st.markdown(
     f"""
     <style>
+      /* ---------- Global page tone ---------- */
+      .stApp {{
+        background: {CREAM_BG};
+      }}
+      [data-testid="stMainBlockContainer"] {{
+        padding-top: 1.4rem;
+      }}
+      [data-testid="stSidebar"] {{
+        background: linear-gradient(180deg, #FFFFFF 0%, {CREAM_BG} 100%);
+        border-right: 1px solid #EBE6D6;
+      }}
+      h1, h2, h3, h4 {{
+        color: {INK};
+        letter-spacing: -0.01em;
+      }}
+      h4 {{
+        font-weight: 700;
+        margin-top: 0.4rem;
+      }}
+
       /* ---------- Header ---------- */
       .ispaza-header {{
-        padding: 1.4rem 1.6rem;
-        border-radius: 16px;
-        background: linear-gradient(120deg, {DEEP_GREEN} 0%, {PRIMARY_GREEN} 55%, #00854b 100%);
+        padding: 1.6rem 1.8rem;
+        border-radius: 20px;
+        background:
+          radial-gradient(circle at 88% -10%, {ACCENT_GOLD} 0%, transparent 38%),
+          linear-gradient(115deg, {DEEP_GREEN} 0%, {PRIMARY_GREEN} 55%, {LEAF_GREEN} 100%);
         color: white;
         margin-bottom: 1.4rem;
-        box-shadow: 0 6px 20px rgba(0, 79, 44, 0.22);
+        box-shadow: 0 10px 30px -8px rgba(10, 74, 51, 0.45);
         position: relative;
         overflow: hidden;
       }}
-      .ispaza-header::after {{
-        content: "";
-        position: absolute;
-        top: -40px;
-        right: -40px;
-        width: 180px;
-        height: 180px;
-        border-radius: 50%;
-        background: rgba(255, 184, 28, 0.18);
-        pointer-events: none;
+      .ispaza-header .brand {{
+        display: flex;
+        align-items: baseline;
+        gap: 0.55rem;
       }}
-      .ispaza-header h1 {{
-        margin: 0;
+      .ispaza-header .brand-logo {{
         font-size: 2.3rem;
         font-weight: 800;
-        letter-spacing: -0.015em;
+        letter-spacing: -0.025em;
+        line-height: 1;
+        margin: 0;
+      }}
+      .ispaza-header .brand-tag {{
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: {ACCENT_GOLD_SOFT};
+        opacity: 0.92;
       }}
       .ispaza-header .tagline {{
-        margin-top: 0.35rem;
+        margin-top: 0.55rem;
         font-size: 1.05rem;
         opacity: 0.95;
         font-weight: 400;
+        max-width: 70%;
       }}
       .ispaza-header .tagline .accent {{
-        color: {ACCENT_YELLOW};
+        color: {ACCENT_GOLD_SOFT};
         font-weight: 700;
       }}
 
+      /* ---------- Tabs (pill style) ---------- */
+      [data-testid="stTabs"] [role="tablist"] {{
+        gap: 0.25rem;
+        background: rgba(255, 255, 255, 0.5);
+        padding: 0.35rem;
+        border-radius: 14px;
+        border: 1px solid #ECE5D2;
+        backdrop-filter: blur(4px);
+      }}
+      [data-testid="stTabs"] [role="tab"] {{
+        padding: 0.5rem 0.9rem;
+        border-radius: 10px;
+        font-weight: 600;
+        color: {MUTED};
+        border: none;
+        background: transparent;
+        transition: all 0.15s ease;
+      }}
+      [data-testid="stTabs"] [role="tab"]:hover {{
+        color: {DEEP_GREEN};
+        background: rgba(14, 110, 74, 0.06);
+      }}
+      [data-testid="stTabs"] [role="tab"][aria-selected="true"] {{
+        background: {DEEP_GREEN};
+        color: white;
+        box-shadow: 0 4px 12px -4px rgba(10, 74, 51, 0.4);
+      }}
+      [data-testid="stTabs"] [data-baseweb="tab-highlight"] {{
+        display: none;
+      }}
+      [data-testid="stTabs"] [data-baseweb="tab-border"] {{
+        display: none;
+      }}
+
       /* ---------- Buttons ---------- */
+      .stButton > button {{
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 0.55rem 1.1rem;
+        transition: all 0.15s ease;
+      }}
       .stButton > button[kind="primary"] {{
         background-color: {PRIMARY_GREEN};
         border-color: {PRIMARY_GREEN};
-        font-weight: 600;
-        padding: 0.6rem 1.2rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0, 107, 60, 0.15);
+        box-shadow: 0 4px 12px -3px rgba(14, 110, 74, 0.4);
       }}
       .stButton > button[kind="primary"]:hover {{
         background-color: {DEEP_GREEN};
         border-color: {DEEP_GREEN};
-        box-shadow: 0 4px 14px rgba(0, 79, 44, 0.25);
+        box-shadow: 0 6px 18px -4px rgba(10, 74, 51, 0.5);
         transform: translateY(-1px);
-        transition: all 0.15s ease;
+      }}
+      .stButton > button[kind="secondary"] {{
+        background: white;
+        border: 1px solid #DDD4BC;
+        color: {INK};
+      }}
+      .stButton > button[kind="secondary"]:hover {{
+        border-color: {PRIMARY_GREEN};
+        color: {PRIMARY_GREEN};
+      }}
+      .stDownloadButton > button {{
+        border-radius: 10px;
+        font-weight: 600;
+      }}
+
+      /* ---------- Inputs ---------- */
+      .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] {{
+        border-radius: 10px !important;
+      }}
+      .stTextInput input:focus, .stTextArea textarea:focus {{
+        border-color: {PRIMARY_GREEN};
+        box-shadow: 0 0 0 3px rgba(14, 110, 74, 0.15);
+      }}
+
+      /* ---------- Containers (st.container border=True) ---------- */
+      [data-testid="stVerticalBlockBorderWrapper"] {{
+        background: {CARD_BG};
+        border: 1px solid #ECE5D2 !important;
+        border-radius: 14px !important;
+        box-shadow: 0 1px 3px rgba(20, 30, 25, 0.04);
       }}
 
       /* ---------- Info banners ---------- */
       .info-banner {{
-        background: {SOFT_BG};
-        border-left: 5px solid {PRIMARY_GREEN};
-        padding: 0.9rem 1.1rem;
-        border-radius: 10px;
+        background: linear-gradient(120deg, {CARD_BG} 0%, {SAND_BG} 100%);
+        border-left: 4px solid {PRIMARY_GREEN};
+        padding: 0.95rem 1.15rem;
+        border-radius: 12px;
         margin-bottom: 1rem;
         font-size: 0.95rem;
+        color: {INK};
+        box-shadow: 0 1px 3px rgba(20, 30, 25, 0.04);
       }}
       .info-banner.accent {{
-        border-left-color: {ACCENT_YELLOW};
+        border-left-color: {ACCENT_GOLD};
+      }}
+      .info-banner strong {{
+        color: {DEEP_GREEN};
       }}
 
       /* ---------- KPI metric cards ---------- */
       [data-testid="stMetric"] {{
-        background: linear-gradient(135deg, #FFFFFF 0%, {SOFT_BG} 100%);
-        border: 1px solid #E5EAE3;
-        border-radius: 12px;
-        padding: 0.95rem 1.1rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        background: linear-gradient(160deg, {CARD_BG} 0%, {SAND_BG} 130%);
+        border: 1px solid #ECE5D2;
+        border-radius: 14px;
+        padding: 1.1rem 1.2rem;
+        box-shadow: 0 2px 6px -2px rgba(20, 30, 25, 0.08);
+      }}
+      [data-testid="stMetric"]::before {{
+        content: "";
+        display: block;
+        width: 28px;
+        height: 3px;
+        border-radius: 999px;
+        background: {ACCENT_GOLD};
+        margin-bottom: 0.5rem;
       }}
       [data-testid="stMetricValue"] {{
-        font-weight: 700;
+        font-weight: 800;
+        font-size: 1.7rem;
         color: {DEEP_GREEN};
+        letter-spacing: -0.01em;
       }}
       [data-testid="stMetricLabel"] {{
-        color: #5a6a5d;
-        font-size: 0.85rem;
-        letter-spacing: 0.01em;
+        color: {MUTED};
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
       }}
 
       /* ---------- Misc ---------- */
       .confidence-line {{
-        margin-top: 0.7rem;
-        color: #555;
+        margin-top: 0.8rem;
+        color: {MUTED};
         font-size: 0.92rem;
       }}
+      .confidence-line strong {{
+        color: {DEEP_GREEN};
+      }}
       .footer {{
-        margin-top: 2.5rem;
-        padding-top: 0.8rem;
-        border-top: 1px solid #eee;
-        color: #888;
+        margin-top: 2.8rem;
+        padding-top: 1rem;
+        border-top: 1px solid #ECE5D2;
+        color: {MUTED};
         font-size: 0.85rem;
         text-align: center;
       }}
       .section-divider {{
         height: 1px;
-        background: linear-gradient(90deg, transparent, #d8e1d4, transparent);
-        margin: 1.8rem 0 1.3rem 0;
+        background: linear-gradient(90deg, transparent, #DDD4BC, transparent);
+        margin: 2rem 0 1.4rem 0;
       }}
 
       /* ---------- Catalogue cards ---------- */
       .catalog-card {{
-        padding: 0.6rem 0.2rem;
+        padding: 0.4rem 0.2rem;
       }}
       .catalog-card .price {{
-        font-size: 1.08rem;
-        font-weight: 700;
-        color: {PRIMARY_GREEN};
+        font-size: 1.12rem;
+        font-weight: 800;
+        color: {DEEP_GREEN};
+        letter-spacing: -0.01em;
       }}
       .catalog-card .margin {{
-        color: #555;
+        color: {MUTED};
         font-size: 0.85rem;
+        font-weight: 500;
       }}
       .catalog-card .meta {{
-        color: #666;
-        font-size: 0.85rem;
-        margin-top: 0.2rem;
+        color: {MUTED};
+        font-size: 0.84rem;
+        margin-top: 0.22rem;
       }}
 
-      /* ---------- Status pills (tickets) ---------- */
+      /* ---------- Status / priority pills ---------- */
       .status-pill {{
         display: inline-block;
-        padding: 0.15rem 0.7rem;
+        padding: 0.2rem 0.75rem;
         border-radius: 999px;
-        font-size: 0.78rem;
-        font-weight: 600;
-        letter-spacing: 0.02em;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-left: 0.35rem;
       }}
-      .status-pill.open {{ background: #FFE9B3; color: #7A4F00; }}
-      .status-pill.in_progress {{ background: #CDE8FF; color: #0D4A8C; }}
-      .status-pill.resolved {{ background: #C9EAD3; color: #0C5C2B; }}
+      .status-pill.open {{ background: #FFEFC9; color: #845300; border: 1px solid #FFD984; }}
+      .status-pill.in_progress {{ background: #D7E9FF; color: #0D4A8C; border: 1px solid #A6CCF5; }}
+      .status-pill.resolved {{ background: #D2EFDA; color: #0C5C2B; border: 1px solid #97D4AC; }}
       .priority-pill {{
         display: inline-block;
-        padding: 0.15rem 0.55rem;
-        border-radius: 6px;
-        font-size: 0.78rem;
-        font-weight: 600;
-        letter-spacing: 0.01em;
-        margin-right: 0.35rem;
+        padding: 0.18rem 0.6rem;
+        border-radius: 8px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        margin-right: 0.25rem;
       }}
-      .priority-pill.low {{ background: #ECF0EA; color: #5a6a5d; }}
+      .priority-pill.low {{ background: #ECF0EA; color: {MUTED}; }}
       .priority-pill.medium {{ background: #FFF1D6; color: #8a5b00; }}
       .priority-pill.high {{ background: #FFD9D6; color: #9B1B17; }}
 
       /* ---------- Sign-in screen ---------- */
       .auth-shell {{
-        background: linear-gradient(160deg, {DEEP_GREEN} 0%, {PRIMARY_GREEN} 60%, #00854b 100%);
-        border-radius: 18px;
-        padding: 2.4rem 1.8rem;
+        background:
+          radial-gradient(circle at 12% 110%, {ACCENT_GOLD} 0%, transparent 35%),
+          linear-gradient(140deg, {DEEP_GREEN} 0%, {PRIMARY_GREEN} 55%, {LEAF_GREEN} 100%);
+        border-radius: 22px;
+        padding: 2.8rem 1.8rem 2.2rem 1.8rem;
         color: white;
-        text-align: center;
-        margin: 1.2rem auto 1.5rem auto;
-        max-width: 560px;
-        box-shadow: 0 12px 36px rgba(0, 79, 44, 0.28);
+        text-align: left;
+        margin: 1rem auto 1.6rem auto;
+        max-width: 620px;
+        box-shadow: 0 18px 50px -12px rgba(10, 74, 51, 0.45);
+        position: relative;
+        overflow: hidden;
+      }}
+      .auth-shell::before {{
+        content: "";
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: rgba(255, 233, 179, 0.16);
+      }}
+      .auth-shell .brand-mark {{
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.3rem 0.65rem;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: {ACCENT_GOLD_SOFT};
+        margin-bottom: 0.95rem;
       }}
       .auth-shell h1 {{
         margin: 0;
-        font-size: 2.6rem;
+        font-size: 2.7rem;
         font-weight: 800;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.025em;
+        color: white;
+        line-height: 1.05;
       }}
       .auth-shell .auth-subtitle {{
-        margin-top: 0.45rem;
+        margin-top: 0.55rem;
         font-size: 1.05rem;
         opacity: 0.92;
+        max-width: 80%;
       }}
       .auth-shell .auth-subtitle .accent {{
-        color: {ACCENT_YELLOW};
+        color: {ACCENT_GOLD_SOFT};
         font-weight: 700;
       }}
+      .auth-shell .auth-bullets {{
+        margin-top: 1.1rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+      }}
+      .auth-shell .auth-bullets span {{
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        padding: 0.32rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 500;
+      }}
       .auth-demo-hint {{
-        background: #FFF8E1;
-        border: 1px dashed {ACCENT_YELLOW};
-        border-radius: 10px;
-        padding: 0.6rem 0.9rem;
+        background: {ACCENT_GOLD_SOFT};
+        border: 1px dashed {ACCENT_GOLD};
+        border-radius: 12px;
+        padding: 0.7rem 1rem;
         font-size: 0.88rem;
         color: #6e5300;
         text-align: center;
-        margin-top: 0.6rem;
+        margin-top: 0.7rem;
       }}
       .auth-demo-hint code {{
-        background: rgba(255, 184, 28, 0.18);
-        padding: 0.05rem 0.35rem;
-        border-radius: 4px;
-        font-weight: 600;
+        background: rgba(228, 168, 44, 0.22);
+        padding: 0.05rem 0.4rem;
+        border-radius: 5px;
+        font-weight: 700;
+        color: #5a3f00;
       }}
       .auth-signed-in {{
-        background: {SOFT_BG};
-        border-radius: 10px;
-        padding: 0.55rem 0.8rem;
+        background: linear-gradient(120deg, {CARD_BG} 0%, {SAND_BG} 100%);
+        border: 1px solid #ECE5D2;
+        border-radius: 12px;
+        padding: 0.6rem 0.85rem;
         font-size: 0.88rem;
-        color: #2d3a2f;
+        color: {INK};
         margin-bottom: 0.6rem;
       }}
       .auth-signed-in strong {{
@@ -334,7 +508,10 @@ if "auth_error" not in st.session_state:
 st.markdown(
     f"""
     <div class="ispaza-header">
-      <h1>iSpaza</h1>
+      <div class="brand">
+        <span class="brand-logo">spazi shops</span>
+        <span class="brand-tag">AI Advisor</span>
+      </div>
       <div class="tagline">
         <span class="accent">{t("tagline_primary")}</span> {t("tagline_secondary")}
       </div>
@@ -368,9 +545,16 @@ def _render_sign_in_gate() -> None:
     st.markdown(
         f"""
         <div class="auth-shell">
-          <h1>iSpaza</h1>
+          <div class="brand-mark">🛒 spazi shops</div>
+          <h1>{t("auth_signin_title")}</h1>
           <div class="auth-subtitle">
             <span class="accent">{t("auth_signin_subtitle")}</span>
+          </div>
+          <div class="auth-bullets">
+            <span>💡 Smart restock advice</span>
+            <span>💰 Daily profit tracking</span>
+            <span>🚚 Delivery scheduling</span>
+            <span>🌐 11 SA languages</span>
           </div>
         </div>
         """,
@@ -378,7 +562,9 @@ def _render_sign_in_gate() -> None:
     )
 
     is_signup = st.session_state.auth_mode == "signup"
-    form_label = t("auth_signup_title") if is_signup else t("auth_signin_title")
+    # Form heading varies by mode. Welcome line is in the hero — only show
+    # the "Create your account" heading when actually signing up.
+    form_label = t("auth_signup_title") if is_signup else t("auth_signin_btn")
 
     left, mid, right = st.columns([1, 3, 1])
     with mid:
@@ -916,7 +1102,7 @@ with tab_profit:
             st.info(t("profit_no_chart"))
         else:
             chart_df = running.set_index("Date")[["Profit (R)", "Cumulative Profit (R)"]]
-            st.line_chart(chart_df, height=320, color=[PRIMARY_GREEN, ACCENT_YELLOW])
+            st.line_chart(chart_df, height=320, color=[PRIMARY_GREEN, ACCENT_GOLD])
             st.caption(t("profit_chart_caption"))
 
     with breakdown_col:
