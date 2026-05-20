@@ -25,8 +25,13 @@ the app delivers four things at once:
    one click.
 
 **No API keys. No external services. No internet required.** The
-recommender, the planner, the tracker and the catalogue all run
-on-device.
+recommender, the planner, the tracker, the catalogue, and the support
+ticket system all run on-device.
+
+The whole UI translates between **all 11 official South African
+languages** — Afrikaans, English, isiNdebele, isiXhosa, isiZulu,
+Sesotho, Sesotho sa Leboa, Setswana, siSwati, Tshivenḓa, Xitsonga —
+via a language picker at the top of the sidebar.
 
 ---
 
@@ -127,6 +132,24 @@ Both logs export to CSV.
 - **Supplier notes** — channel, delivery days, lead time, transport
   cost, minimum order, and the gotcha for each supplier.
 
+### 🆘 Help & Reports
+A built-in support ticket system. Three things live here:
+
+- **Create a new ticket** — subject, category (Advice quality, Pricing
+  data, Delivery info, App bug, Other), priority (Low / Medium / High),
+  free-form description. Submits to the in-session ticket store.
+- **Your tickets** — every ticket rendered as a card with status,
+  priority and category badges. Each card has an **Update status**
+  button that cycles `Open → In progress → Resolved → Open`.
+- **Show status** filter at the top right narrows the list to a
+  single status.
+
+Plus a one-click **Report a problem with this advice** button on the
+Get Advice tab — opens a pre-filled ticket form that snapshots the
+current advice mode and confidence so you don't have to retype the
+context. Tickets are session-scoped (Streamlit Cloud has an ephemeral
+filesystem); CSV download is the production path until a real DB lands.
+
 ### 🛍️ Browse Products
 - **Search box** — free-text matches product name, supplier or category.
 - **Category filter** — multiselect across snacks, soft drinks,
@@ -170,13 +193,16 @@ ispaza/
 ├── app.py                  # Streamlit UI (single entry point)
 ├── advisor.py              # Worded recommender (three-section markdown)
 ├── quick_actions.py        # ⬆️/⬇️/⏸️ recommender (DataFrame of bumps)
-├── tracker.py              # Purchase log + daily profit
+├── tracker.py              # Purchase log + daily profit + units charts
 ├── delivery.py             # Weekly schedule + opinionated purchase plan
 ├── catalog.py              # Product browse, filter, add-to-stock
+├── support.py              # Support ticket CRUD + filter + CSV export
+├── i18n.py                 # Translation lookup + locale registry
 ├── core.py                 # Shared helpers (loaders, parser, defaults)
 ├── data/
 │   ├── benchmarks.json     # 17 products: prices, costs, suppliers, days
-│   └── suppliers.json      # 4 SA-township supplier patterns + transport
+│   ├── suppliers.json      # 4 SA-township supplier patterns + transport
+│   └── i18n.json           # UI strings × 11 official languages
 ├── tests/
 │   ├── conftest.py
 │   ├── test_core.py
@@ -184,13 +210,30 @@ ispaza/
 │   ├── test_quick_actions.py
 │   ├── test_tracker.py
 │   ├── test_delivery.py
-│   └── test_catalog.py
+│   ├── test_catalog.py
+│   ├── test_support.py
+│   └── test_i18n.py
 ├── .streamlit/config.toml  # Brand colours (SA green + accent yellow)
 ├── .python-version         # Pins Python 3.11 for hosted deploys
 ├── requirements.txt        # Runtime deps (streamlit, pandas, numpy)
 ├── requirements-dev.txt    # Runtime deps + pytest
 └── README.md
 ```
+
+## A note on the translations
+
+`data/i18n.json` ships full UI translations for **English, Afrikaans,
+isiZulu, isiXhosa**. The other seven official languages (isiNdebele,
+siSwati, Sesotho, Sesotho sa Leboa, Setswana, Tshivenḓa, Xitsonga)
+have the critical UI surface translated — tabs, buttons, headers,
+status labels, the ticket form — with a tested completeness floor
+defined by `CRITICAL_KEYS` in `i18n.py`. Long body paragraphs (banners,
+help text) fall back to English in those locales until a native-speaker
+review pass lands.
+
+Translations are AI-assisted starting points. PRs from native speakers
+are very welcome — open one against `data/i18n.json` and the test suite
+will tell you if you missed a critical key.
 
 All business logic lives in pure Python modules so the entire app can
 be unit-tested without launching Streamlit.

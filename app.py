@@ -38,7 +38,25 @@ from delivery import (
     upcoming_deliveries,
     weekly_schedule,
 )
-from quick_actions import quick_actions_df, quick_actions_to_csv
+from i18n import DEFAULT_LOCALE, LOCALES, t
+from support import (
+    CATEGORIES,
+    PRIORITIES,
+    STATUSES,
+    create_ticket,
+    default_tickets,
+    filter_by_status,
+    tickets_to_csv,
+    tickets_to_df,
+    update_status,
+)
+from quick_actions import (
+    DIR_DECREASE,
+    DIR_HOLD,
+    DIR_INCREASE,
+    quick_actions_df,
+    quick_actions_to_csv,
+)
 from tracker import (
     Sale,
     daily_profit_breakdown,
@@ -160,11 +178,11 @@ st.markdown(
 )
 
 st.markdown(
-    """
+    f"""
     <div class="ispaza-header">
       <h1>iSpaza</h1>
       <div class="tagline">
-        <span class="accent">Better decisions today.</span> Banking tomorrow.
+        <span class="accent">{t("tagline_primary")}</span> {t("tagline_secondary")}
       </div>
     </div>
     """,
@@ -198,6 +216,10 @@ def cached_catalog_df() -> pd.DataFrame:
 
 _today = date.today()
 _benchmarks = cached_benchmarks()
+
+# Initialise locale BEFORE any t() call so the header tagline localises on first paint.
+if "locale" not in st.session_state:
+    st.session_state.locale = DEFAULT_LOCALE
 
 if "latest_advice" not in st.session_state:
     st.session_state.latest_advice = None
@@ -233,35 +255,43 @@ if "browse_categories" not in st.session_state:
 if "schedule_overrides" not in st.session_state:
     st.session_state.schedule_overrides = {}
 
+if "tickets" not in st.session_state:
+    st.session_state.tickets = default_tickets()
+
+if "help_status_filter" not in st.session_state:
+    st.session_state.help_status_filter = ""  # empty = All
+
+if "show_report_form" not in st.session_state:
+    st.session_state.show_report_form = False
+
 
 # ---------------------------------------------------------------------------
 # Sidebar
 # ---------------------------------------------------------------------------
 
 with st.sidebar:
-    st.markdown(f"### 🏪 Shop details")
-    shop_name = st.text_input("Shop name", value="Mama Thandi's Spaza")
-    location = st.text_input("Location", value="Diepkloof, Soweto")
+    locale_codes = list(LOCALES.keys())
+    st.session_state.locale = st.selectbox(
+        f"🌐 {t('language_label')}",
+        options=locale_codes,
+        format_func=lambda code: LOCALES[code],
+        index=locale_codes.index(st.session_state.locale),
+        key="locale_selector",
+    )
 
     st.divider()
 
-    with st.expander("ℹ️ About iSpaza"):
-        st.markdown(
-            """
-**iSpaza helps you:**
-
-1. **Decide** what to restock, what to reprice, and what new product to try.
-2. **Plan** which day to be at which supplier (Sasko, Coca-Cola depot,
-   the Simba rep, Jumbo Cash & Carry).
-3. **Track** daily profit per product so you know exactly which lines
-   pay the rent.
-4. **Browse** the catalogue and add new products to your stock with
-   one click.
-            """
-        )
+    st.markdown(f"### 🏪 {t('sidebar_shop_details')}")
+    shop_name = st.text_input(t("sidebar_shop_name"), value="Mama Thandi's Spaza")
+    location = st.text_input(t("sidebar_location"), value="Diepkloof, Soweto")
 
     st.divider()
-    st.caption("Built for the IEB TechWays AI Hackathon 2026.")
+
+    with st.expander(f"ℹ️ {t('sidebar_about_title')}"):
+        st.markdown(t("sidebar_about_body"))
+
+    st.divider()
+    st.caption(t("sidebar_caption"))
 
 
 # ---------------------------------------------------------------------------
@@ -271,9 +301,9 @@ with st.sidebar:
 
 def render_worded_advice(advice: Advice) -> None:
     cards = [
-        ("🔄 Restock this week", advice.restock),
-        ("💰 Pricing adjustments", advice.pricing),
-        ("➕ One product to add", advice.add),
+        (t("advice_card_restock"), advice.restock),
+        (t("advice_card_pricing"), advice.pricing),
+        (t("advice_card_add"), advice.add),
     ]
     for title, body in cards:
         with st.container(border=True):
@@ -281,32 +311,53 @@ def render_worded_advice(advice: Advice) -> None:
             if body:
                 st.markdown(body)
             else:
-                st.caption("_No content returned for this section._")
+                st.caption(t("advice_no_section"))
 
     st.markdown(
-        f"<div class='confidence-line'><em>Confidence: "
+        f"<div class='confidence-line'><em>{t('advice_confidence')}: "
         f"<strong>{advice.confidence}</strong></em></div>",
         unsafe_allow_html=True,
     )
 
 
+def localize_quick_actions(df: pd.DataFrame) -> pd.DataFrame:
+    """Translate the Action and Adjust cell values into the active locale."""
+    if df.empty:
+        return df
+    direction_map = {
+        DIR_INCREASE: t("qa_dir_increase"),
+        DIR_DECREASE: t("qa_dir_decrease"),
+        DIR_HOLD: t("qa_dir_hold"),
+    }
+    adjust_map = {
+        "Stock": t("qa_adjust_stock"),
+        "Price": t("qa_adjust_price"),
+        "—": t("qa_adjust_none"),
+    }
+    out = df.copy()
+    out["Action"] = out["Action"].map(lambda v: direction_map.get(v, v))
+    out["Adjust"] = out["Adjust"].map(lambda v: adjust_map.get(v, v))
+    return out
+
+
 def render_quick_actions(df: pd.DataFrame) -> None:
     if df.empty:
-        st.info("No actions — add stock and sales data and click _Get advice_.")
+        st.info(t("advice_no_actions"))
         return
 
+    localized = localize_quick_actions(df)
     st.dataframe(
-        df,
+        localized,
         width="stretch",
         hide_index=True,
         column_config={
-            "Action": st.column_config.TextColumn("Action", width="small"),
-            "Product": st.column_config.TextColumn("Product", width="medium"),
-            "Adjust": st.column_config.TextColumn("Adjust", width="small"),
-            "By": st.column_config.TextColumn("By", width="small"),
-            "Reason": st.column_config.TextColumn("Reason", width="large"),
+            "Action": st.column_config.TextColumn(t("col_action"), width="small"),
+            "Product": st.column_config.TextColumn(t("col_product"), width="medium"),
+            "Adjust": st.column_config.TextColumn(t("col_adjust"), width="small"),
+            "By": st.column_config.TextColumn(t("col_by"), width="small"),
+            "Reason": st.column_config.TextColumn(t("col_reason"), width="large"),
             "Priority": st.column_config.ProgressColumn(
-                "Priority",
+                t("col_priority"),
                 min_value=0,
                 max_value=100,
                 format="%d",
@@ -315,8 +366,8 @@ def render_quick_actions(df: pd.DataFrame) -> None:
         },
     )
     st.download_button(
-        "⬇️ Download these actions (CSV)",
-        data=quick_actions_to_csv(df),
+        t("advice_download_quick"),
+        data=quick_actions_to_csv(localized),
         file_name=f"ispaza_quick_actions_{date.today().isoformat()}.csv",
         mime="text/csv",
     )
@@ -326,12 +377,13 @@ def render_quick_actions(df: pd.DataFrame) -> None:
 # Tabs
 # ---------------------------------------------------------------------------
 
-tab_advice, tab_profit, tab_delivery, tab_browse = st.tabs(
+tab_advice, tab_profit, tab_delivery, tab_browse, tab_help = st.tabs(
     [
-        "💡 Get Advice",
-        "💰 Profit Tracker",
-        "🚚 Delivery & Purchasing",
-        "🛍️ Browse Products",
+        t("tab_advice"),
+        t("tab_profit"),
+        t("tab_delivery"),
+        t("tab_browse"),
+        t("tab_help"),
     ]
 )
 
@@ -340,13 +392,13 @@ tab_advice, tab_profit, tab_delivery, tab_browse = st.tabs(
 
 
 with tab_advice:
-    st.subheader("Tell iSpaza what's on your shelves and what sold last week")
+    st.subheader(t("advice_subhead"))
 
     left, right = st.columns(2, gap="large")
 
     with left:
-        st.markdown("**📦 Current Stock**")
-        st.caption("What's on your shelves right now.")
+        st.markdown(f"**{t('advice_stock_label')}**")
+        st.caption(t("advice_stock_caption"))
         st.session_state.stock_df = st.data_editor(
             st.session_state.stock_df,
             num_rows="dynamic",
@@ -354,18 +406,18 @@ with tab_advice:
             hide_index=True,
             column_config={
                 "Product": st.column_config.TextColumn(
-                    "Product", required=True, width="medium"
+                    t("col_product"), required=True, width="medium"
                 ),
                 "Quantity": st.column_config.NumberColumn(
-                    "Quantity", min_value=0, step=1, format="%d"
+                    t("col_quantity"), min_value=0, step=1, format="%d"
                 ),
             },
             key="stock_editor",
         )
 
     with right:
-        st.markdown("**🧾 Last Week's Sales**")
-        st.caption("How many of each you sold in the past 7 days.")
+        st.markdown(f"**{t('advice_sales_label')}**")
+        st.caption(t("advice_sales_caption"))
         st.session_state.sales_df = st.data_editor(
             st.session_state.sales_df,
             num_rows="dynamic",
@@ -373,10 +425,10 @@ with tab_advice:
             hide_index=True,
             column_config={
                 "Product": st.column_config.TextColumn(
-                    "Product", required=True, width="medium"
+                    t("col_product"), required=True, width="medium"
                 ),
                 "Units Sold": st.column_config.NumberColumn(
-                    "Units Sold", min_value=0, step=1, format="%d"
+                    t("col_units_sold"), min_value=0, step=1, format="%d"
                 ),
             },
             key="sales_editor",
@@ -384,27 +436,33 @@ with tab_advice:
 
     st.write("")
 
+    # Map localized labels back to internal mode keys so changing language
+    # doesn't reset the user's mode choice.
+    worded_label = t("advice_style_worded")
+    quick_label = t("advice_style_quick")
+    mode_to_label = {"Worded advice": worded_label, "Quick actions": quick_label}
+    label_to_mode = {v: k for k, v in mode_to_label.items()}
+    current_label = mode_to_label.get(st.session_state.advice_mode, worded_label)
+
     mode_col, btn_col = st.columns([2, 1])
     with mode_col:
-        st.session_state.advice_mode = st.radio(
-            "Advice style",
-            ["Worded advice", "Quick actions"],
+        chosen_label = st.radio(
+            t("advice_style_label"),
+            [worded_label, quick_label],
             horizontal=True,
-            help=(
-                "**Worded** — three short sections you can read like a brief. "
-                "**Quick actions** — a table of one-line bumps (⬆️ Increase / "
-                "⬇️ Decrease / ⏸️ Hold), the specific amount, and a reason."
-            ),
+            index=[worded_label, quick_label].index(current_label),
+            help=t("advice_style_help"),
             key="advice_mode_radio",
         )
+        st.session_state.advice_mode = label_to_mode[chosen_label]
     with btn_col:
         st.write("")
-        clicked = st.button("Get advice from iSpaza", type="primary", width="stretch")
+        clicked = st.button(t("advice_button"), type="primary", width="stretch")
 
     if clicked:
         try:
             benchmarks = cached_benchmarks()
-            with st.spinner("iSpaza is thinking…"):
+            with st.spinner(t("advice_thinking")):
                 raw_text = generate_advice_markdown(
                     shop_name,
                     location,
@@ -427,18 +485,82 @@ with tab_advice:
     has_quick = st.session_state.latest_quick_df is not None
     if has_worded or has_quick:
         st.write("")
-        st.markdown("### iSpaza's advice")
+        st.markdown(f"### {t('advice_heading')}")
         if st.session_state.advice_mode == "Worded advice" and has_worded:
             render_worded_advice(st.session_state.latest_advice)
         elif st.session_state.advice_mode == "Quick actions" and has_quick:
             render_quick_actions(st.session_state.latest_quick_df)
+
+        # Report-a-problem affordance — creates a support ticket pre-filled
+        # with the advice context so the owner doesn't have to retype.
+        st.write("")
+        if st.button(
+            t("advice_report_problem"),
+            key="advice_report_btn",
+            type="secondary",
+        ):
+            st.session_state.show_report_form = not st.session_state.show_report_form
+
+        if st.session_state.show_report_form:
+            with st.form("advice_report_form", border=True, clear_on_submit=True):
+                st.markdown(f"**{t('advice_report_problem')}**")
+                report_subject = st.text_input(
+                    t("help_field_subject"),
+                    value=t("report_default_subject"),
+                    key="advice_report_subject",
+                )
+                report_description = st.text_area(
+                    t("help_field_description"),
+                    placeholder="What was wrong with the advice?",
+                    key="advice_report_description",
+                    height=100,
+                )
+                report_priority_label = st.selectbox(
+                    t("help_field_priority"),
+                    options=[t("help_priority_low"), t("help_priority_medium"), t("help_priority_high")],
+                    index=1,
+                    key="advice_report_priority",
+                )
+                priority_key_by_label = {
+                    t("help_priority_low"): "low",
+                    t("help_priority_medium"): "medium",
+                    t("help_priority_high"): "high",
+                }
+                submitted = st.form_submit_button(t("help_btn_submit"), type="primary")
+                if submitted:
+                    try:
+                        new = create_ticket(
+                            subject=report_subject,
+                            description=report_description,
+                            category="advice",
+                            priority=priority_key_by_label.get(report_priority_label, "medium"),
+                            locale=st.session_state.locale,
+                            context={
+                                "source": "advice_tab",
+                                "advice_mode": st.session_state.advice_mode,
+                                "confidence": (
+                                    st.session_state.latest_advice.confidence
+                                    if st.session_state.latest_advice is not None
+                                    else None
+                                ),
+                            },
+                            existing=st.session_state.tickets,
+                        )
+                        st.session_state.tickets.append(new)
+                        st.session_state.show_report_form = False
+                        st.toast(
+                            t("help_toast_submitted", id=new.id),
+                            icon="🆘",
+                        )
+                    except ValueError as e:
+                        st.error(str(e))
 
 
 # ----- Tab 2: Profit Tracker ----------------------------------------------
 
 
 with tab_profit:
-    st.subheader("Profit Tracker — what your shop is actually earning")
+    st.subheader(t("profit_subhead"))
 
     sales_records = [
         Sale(
@@ -460,52 +582,54 @@ with tab_profit:
     margin = (profit / rev * 100) if rev else 0.0
 
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Revenue (R)", f"R{rev:,.2f}")
-    k2.metric("Cost of goods (R)", f"R{cog:,.2f}")
-    k3.metric("Profit (R)", f"R{profit:,.2f}")
-    k4.metric("Margin", f"{margin:.1f}%")
+    k1.metric(t("profit_kpi_revenue"), f"R{rev:,.2f}")
+    k2.metric(t("profit_kpi_cost"), f"R{cog:,.2f}")
+    k3.metric(t("profit_kpi_profit"), f"R{profit:,.2f}")
+    k4.metric(t("profit_kpi_margin"), f"{margin:.1f}%")
 
     st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
     chart_col, breakdown_col = st.columns([3, 2], gap="large")
 
     with chart_col:
-        st.markdown("#### Daily profit")
+        st.markdown(f"#### {t('profit_section_daily')}")
         running = running_totals(sales_records)
         if running.empty:
-            st.info("Add some sales below to see your profit line.")
+            st.info(t("profit_no_chart"))
         else:
             chart_df = running.set_index("Date")[["Profit (R)", "Cumulative Profit (R)"]]
             st.line_chart(chart_df, height=320, color=[PRIMARY_GREEN, ACCENT_YELLOW])
-            st.caption("Green = profit per day · Yellow = cumulative.")
+            st.caption(t("profit_chart_caption"))
 
     with breakdown_col:
-        st.markdown("#### Per-product breakdown")
+        st.markdown(f"#### {t('profit_section_per_product')}")
         per_product = product_profit_breakdown(sales_records)
         if per_product.empty:
-            st.info("No product breakdown yet.")
+            st.info(t("profit_no_breakdown"))
         else:
             st.dataframe(
                 per_product,
                 width="stretch",
                 hide_index=True,
                 column_config={
-                    "Profit (R)": st.column_config.NumberColumn(format="R%.2f"),
-                    "Revenue (R)": st.column_config.NumberColumn(format="R%.2f"),
-                    "Cost (R)": st.column_config.NumberColumn(format="R%.2f"),
-                    "Margin %": st.column_config.NumberColumn(format="%.1f%%"),
+                    "Product": st.column_config.TextColumn(t("col_product")),
+                    "Units": st.column_config.NumberColumn(t("col_units")),
+                    "Profit (R)": st.column_config.NumberColumn(t("col_profit"), format="R%.2f"),
+                    "Revenue (R)": st.column_config.NumberColumn(t("col_revenue"), format="R%.2f"),
+                    "Cost (R)": st.column_config.NumberColumn(t("col_cost"), format="R%.2f"),
+                    "Margin %": st.column_config.NumberColumn(t("col_margin_pct"), format="%.1f%%"),
                 },
             )
 
     st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
-    st.markdown("#### Units sold")
+    st.markdown(f"#### {t('profit_section_units')}")
     units_col_a, units_col_b = st.columns(2, gap="large")
     with units_col_a:
-        st.markdown("**By product** (total over window)")
+        st.markdown(t("profit_units_by_product"))
         by_product = units_by_product(sales_records)
         if by_product.empty:
-            st.info("No sales recorded yet.")
+            st.info(t("profit_no_units"))
         else:
             st.bar_chart(
                 by_product.set_index("Product")["Units"],
@@ -513,30 +637,32 @@ with tab_profit:
                 color=PRIMARY_GREEN,
             )
     with units_col_b:
-        st.markdown("**By day** (stacked by product)")
+        st.markdown(t("profit_units_by_day"))
         pivot = units_pivot_by_day(sales_records)
         if pivot.empty:
-            st.info("No sales recorded yet.")
+            st.info(t("profit_no_units"))
         else:
             st.bar_chart(pivot, stack=True, height=300)
-            st.caption("Hover to see each product's contribution per day.")
+            st.caption(t("profit_units_by_day_hint"))
 
     st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
-    st.markdown("#### Daily breakdown")
+    st.markdown(f"#### {t('profit_section_daily_breakdown')}")
     daily = daily_profit_breakdown(sales_records)
     if daily.empty:
-        st.info("No daily data yet.")
+        st.info(t("profit_no_daily"))
     else:
         st.dataframe(
             daily,
             width="stretch",
             hide_index=True,
             column_config={
-                "Revenue (R)": st.column_config.NumberColumn(format="R%.2f"),
-                "Cost (R)": st.column_config.NumberColumn(format="R%.2f"),
-                "Profit (R)": st.column_config.NumberColumn(format="R%.2f"),
-                "Margin %": st.column_config.NumberColumn(format="%.1f%%"),
+                "Date": st.column_config.TextColumn(t("col_date")),
+                "Units": st.column_config.NumberColumn(t("col_units")),
+                "Revenue (R)": st.column_config.NumberColumn(t("col_revenue"), format="R%.2f"),
+                "Cost (R)": st.column_config.NumberColumn(t("col_cost"), format="R%.2f"),
+                "Profit (R)": st.column_config.NumberColumn(t("col_profit"), format="R%.2f"),
+                "Margin %": st.column_config.NumberColumn(t("col_margin_pct"), format="%.1f%%"),
             },
         )
 
@@ -545,72 +671,70 @@ with tab_profit:
     log_left, log_right = st.columns(2, gap="large")
 
     with log_left:
-        st.markdown("**🧾 Sales log**")
-        st.caption(
-            "One row per product per day. Edit unit price/cost to see profit update."
-        )
+        st.markdown(f"**{t('profit_sales_log')}**")
+        st.caption(t("profit_sales_log_caption"))
         st.session_state.sales_log_df = st.data_editor(
             st.session_state.sales_log_df,
             num_rows="dynamic",
             width="stretch",
             hide_index=True,
             column_config={
-                "Date": st.column_config.TextColumn("Date", help="YYYY-MM-DD"),
-                "Product": st.column_config.TextColumn("Product", required=True),
+                "Date": st.column_config.TextColumn(t("col_date"), help="YYYY-MM-DD"),
+                "Product": st.column_config.TextColumn(t("col_product"), required=True),
                 "Units": st.column_config.NumberColumn(
-                    "Units", min_value=0, step=1, format="%d"
+                    t("col_units"), min_value=0, step=1, format="%d"
                 ),
                 "Unit Price (R)": st.column_config.NumberColumn(
-                    "Unit Price", min_value=0.0, step=0.5, format="R%.2f"
+                    t("col_unit_price"), min_value=0.0, step=0.5, format="R%.2f"
                 ),
                 "Unit Cost (R)": st.column_config.NumberColumn(
-                    "Unit Cost", min_value=0.0, step=0.5, format="R%.2f"
+                    t("col_unit_cost"), min_value=0.0, step=0.5, format="R%.2f"
                 ),
                 "Revenue (R)": st.column_config.NumberColumn(
-                    "Revenue", format="R%.2f", disabled=True
+                    t("col_revenue"), format="R%.2f", disabled=True
                 ),
                 "Cost (R)": st.column_config.NumberColumn(
-                    "Cost", format="R%.2f", disabled=True
+                    t("col_cost"), format="R%.2f", disabled=True
                 ),
                 "Profit (R)": st.column_config.NumberColumn(
-                    "Profit", format="R%.2f", disabled=True
+                    t("col_profit"), format="R%.2f", disabled=True
                 ),
             },
             key="sales_log_editor",
         )
         st.download_button(
-            "⬇️ Sales log (CSV)",
+            t("profit_download_sales"),
             data=st.session_state.sales_log_df.to_csv(index=False).encode("utf-8"),
             file_name=f"ispaza_sales_{date.today().isoformat()}.csv",
             mime="text/csv",
         )
 
     with log_right:
-        st.markdown("**📥 Purchase log**")
-        st.caption("Every stock-in event — track what you paid and to whom.")
+        st.markdown(f"**{t('profit_purchase_log')}**")
+        st.caption(t("profit_purchase_log_caption"))
         st.session_state.purchase_log_df = st.data_editor(
             st.session_state.purchase_log_df,
             num_rows="dynamic",
             width="stretch",
             hide_index=True,
             column_config={
-                "Date": st.column_config.TextColumn("Date", help="YYYY-MM-DD"),
-                "Product": st.column_config.TextColumn("Product", required=True),
+                "Date": st.column_config.TextColumn(t("col_date"), help="YYYY-MM-DD"),
+                "Product": st.column_config.TextColumn(t("col_product"), required=True),
                 "Quantity": st.column_config.NumberColumn(
-                    "Quantity", min_value=0, step=1, format="%d"
+                    t("col_quantity"), min_value=0, step=1, format="%d"
                 ),
                 "Unit Cost (R)": st.column_config.NumberColumn(
-                    "Unit Cost", min_value=0.0, step=0.5, format="R%.2f"
+                    t("col_unit_cost"), min_value=0.0, step=0.5, format="R%.2f"
                 ),
                 "Total Cost (R)": st.column_config.NumberColumn(
-                    "Total Cost", format="R%.2f", disabled=True
+                    t("col_total_cost"), format="R%.2f", disabled=True
                 ),
-                "Supplier": st.column_config.TextColumn("Supplier"),
+                "Supplier": st.column_config.TextColumn(t("col_supplier")),
             },
             key="purchase_log_editor",
         )
         st.download_button(
-            "⬇️ Purchase log (CSV)",
+            t("profit_download_purchases"),
             data=st.session_state.purchase_log_df.to_csv(index=False).encode("utf-8"),
             file_name=f"ispaza_purchases_{date.today().isoformat()}.csv",
             mime="text/csv",
@@ -621,7 +745,7 @@ with tab_profit:
 
 
 with tab_delivery:
-    st.subheader("Delivery & Purchasing — what to buy, where, and when")
+    st.subheader(t("delivery_subhead"))
 
     benchmarks = cached_benchmarks()
     suppliers = cached_suppliers()
@@ -632,12 +756,7 @@ with tab_delivery:
     st.markdown(
         f"""
         <div class="info-banner accent">
-          📅 <strong>This week's plan</strong> below combines your live stock /
-          sales numbers with realistic supplier patterns for Gauteng townships.
-          Each line auto-schedules to the supplier's best day — switch to
-          <em>Manual</em> to pick your own date or <em>Skip</em> to drop it.
-          The grand total includes stock outlay <strong>plus</strong>
-          transport (R0 for direct delivery, ~R80 per Jumbo Cash &amp; Carry trip).
+          {t("delivery_banner")}
         </div>
         """,
         unsafe_allow_html=True,
@@ -651,18 +770,26 @@ with tab_delivery:
     )
     plan = add_schedule_columns(base_plan, overrides=st.session_state.schedule_overrides)
 
-    st.markdown("#### This week's purchase plan")
+    st.markdown(f"#### {t('delivery_section_plan')}")
     if plan.empty:
-        st.success(
-            "✅ Nothing urgent to source this week — stock levels are matching demand."
-        )
-        # Reset overrides for products no longer in the plan
+        st.success(t("delivery_nothing_urgent"))
         st.session_state.schedule_overrides = {}
     else:
-        # Convert Scheduled date column to pd.Timestamp so DateColumn renders it
         plan_for_editor = plan.copy()
         plan_for_editor["Scheduled date"] = pd.to_datetime(
             plan_for_editor["Scheduled date"]
+        )
+
+        # Map internal mode values to localized labels so the dropdown
+        # shows the user's language; we map back before persisting.
+        mode_to_label = {
+            "Auto": t("schedule_mode_auto"),
+            "Manual": t("schedule_mode_manual"),
+            "Skip": t("schedule_mode_skip"),
+        }
+        label_to_mode = {v: k for k, v in mode_to_label.items()}
+        plan_for_editor["Mode"] = plan_for_editor["Mode"].map(
+            lambda m: mode_to_label.get(m, m)
         )
 
         edited_plan = st.data_editor(
@@ -676,39 +803,36 @@ with tab_delivery:
                 "Reason", "Urgency",
             ],
             column_config={
-                "Buy": st.column_config.TextColumn("Buy", width="small"),
+                "Product": st.column_config.TextColumn(t("col_product")),
+                "Buy": st.column_config.TextColumn(t("col_buy"), width="small"),
                 "Unit cost (R)": st.column_config.NumberColumn(
-                    "Unit cost", format="R%.2f"
+                    t("col_unit_cost"), format="R%.2f"
                 ),
                 "Est. cost (R)": st.column_config.NumberColumn(
-                    "Line cost", format="R%.2f"
+                    t("col_line_cost"), format="R%.2f"
                 ),
-                "Supplier": st.column_config.TextColumn("Supplier", width="medium"),
-                "Channel": st.column_config.TextColumn("Channel", width="small"),
-                "Best day": st.column_config.TextColumn("Best day", width="small"),
+                "Supplier": st.column_config.TextColumn(t("col_supplier"), width="medium"),
+                "Channel": st.column_config.TextColumn(t("col_channel"), width="small"),
+                "Best day": st.column_config.TextColumn(t("col_best_day"), width="small"),
                 "Next date": st.column_config.TextColumn(
-                    "Auto date", width="small", help="Supplier's next best day."
+                    t("col_next_date"), width="small", help=t("schedule_auto_date_help")
                 ),
                 "Mode": st.column_config.SelectboxColumn(
-                    "Schedule",
-                    options=list(SCHEDULE_MODES),
+                    t("col_mode"),
+                    options=list(mode_to_label.values()),
                     required=True,
                     width="small",
-                    help=(
-                        "Auto = use the supplier's best day · "
-                        "Manual = pick your own date · "
-                        "Skip = drop from totals"
-                    ),
+                    help=t("schedule_mode_help"),
                 ),
                 "Scheduled date": st.column_config.DateColumn(
-                    "Scheduled date",
+                    t("col_scheduled_date"),
                     width="small",
                     format="YYYY-MM-DD",
-                    help="When you're actually going to buy this. Manual edits switch the schedule to Manual.",
+                    help=t("schedule_date_help"),
                 ),
-                "Reason": st.column_config.TextColumn("Reason", width="large"),
+                "Reason": st.column_config.TextColumn(t("col_reason"), width="large"),
                 "Urgency": st.column_config.ProgressColumn(
-                    "Urgency", min_value=0, max_value=100, format="%d", width="small"
+                    t("col_urgency"), min_value=0, max_value=100, format="%d", width="small"
                 ),
             },
             column_order=[
@@ -716,6 +840,11 @@ with tab_delivery:
                 "Supplier", "Mode", "Scheduled date", "Best day",
                 "Next date", "Reason", "Urgency",
             ],
+        )
+        # Map localized mode labels back to internal values before processing.
+        edited_plan = edited_plan.copy()
+        edited_plan["Mode"] = edited_plan["Mode"].map(
+            lambda lbl: label_to_mode.get(lbl, lbl)
         )
 
         # Persist user changes back to session state.
@@ -748,72 +877,100 @@ with tab_delivery:
         totals = grand_totals(plan_for_totals, suppliers=suppliers)
         included_count = int((plan_for_totals["Mode"] != "Skip").sum())
         skipped_count = len(plan_for_totals) - included_count
-        skip_note = f" · {skipped_count} skipped" if skipped_count else ""
+        skip_note = t("delivery_caption_skipped", n=skipped_count) if skipped_count else ""
         st.caption(
-            f"{included_count} included{skip_note} · "
-            f"stock **R{totals['stock']:,.2f}** + "
-            f"transport **R{totals['transport']:,.2f}** = "
-            f"**R{totals['total']:,.2f}**"
+            t(
+                "delivery_caption_summary",
+                included=included_count,
+                skip_note=skip_note,
+                stock=totals["stock"],
+                transport=totals["transport"],
+                total=totals["total"],
+            )
         )
 
         st.download_button(
-            "⬇️ Purchase plan (CSV)",
+            t("delivery_download_plan"),
             data=schedule_to_csv(plan_for_totals),
             file_name=f"ispaza_purchase_plan_{today.isoformat()}.csv",
             mime="text/csv",
         )
 
-        st.markdown("#### Combined trips (with transport cost)")
-        st.caption(
-            "Grouped by the day you'll be at each supplier — fewer trips, "
-            "less transport cost. Skipped lines are excluded."
-        )
+        st.markdown(f"#### {t('delivery_section_trips')}")
+        st.caption(t("delivery_section_trips_caption"))
         trips = trip_summary(plan_for_totals, suppliers=suppliers)
         if trips.empty:
-            st.info("Every line is set to Skip — no trips this week.")
+            st.info(t("delivery_all_skipped"))
         else:
             st.dataframe(
                 trips,
                 width="stretch",
                 hide_index=True,
                 column_config={
+                    "Scheduled date": st.column_config.TextColumn(t("col_scheduled_date")),
+                    "Best day": st.column_config.TextColumn(t("col_best_day")),
+                    "Supplier": st.column_config.TextColumn(t("col_supplier")),
+                    "Items": st.column_config.TextColumn(t("col_items")),
                     "Stock cost (R)": st.column_config.NumberColumn(
-                        "Stock cost", format="R%.2f"
+                        t("col_stock_cost"), format="R%.2f"
                     ),
                     "Transport (R)": st.column_config.NumberColumn(
-                        "Transport", format="R%.2f"
+                        t("col_transport"), format="R%.2f"
                     ),
-                    "Total (R)": st.column_config.NumberColumn("Total", format="R%.2f"),
+                    "Total (R)": st.column_config.NumberColumn(t("col_total"), format="R%.2f"),
                 },
             )
             st.markdown(
-                f"<div class='info-banner'><strong>Grand total this week:</strong> "
-                f"R{totals['total']:,.2f} "
-                f"&nbsp;·&nbsp; stock R{totals['stock']:,.2f} "
-                f"&nbsp;+&nbsp; transport R{totals['transport']:,.2f}</div>",
+                "<div class='info-banner'>"
+                + t(
+                    "delivery_grand_total_html",
+                    total=totals["total"],
+                    stock=totals["stock"],
+                    transport=totals["transport"],
+                )
+                + "</div>",
                 unsafe_allow_html=True,
             )
 
     st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
-    st.markdown("#### Next 7 days")
+    st.markdown(f"#### {t('delivery_section_next7')}")
     upcoming = upcoming_deliveries(
         today,
         benchmarks,
         products_in_shop=stocked_products if stocked_products else None,
     )
-    st.dataframe(upcoming, width="stretch", hide_index=True)
+    st.dataframe(
+        upcoming,
+        width="stretch",
+        hide_index=True,
+        column_config={
+            "Date": st.column_config.TextColumn(t("col_date")),
+            "Day": st.column_config.TextColumn(t("col_day")),
+            "Deliveries arriving": st.column_config.TextColumn(t("col_deliveries_arriving")),
+            "Best to order / buy": st.column_config.TextColumn(t("col_best_to_order")),
+        },
+    )
 
     st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
-    st.markdown("#### Reference: typical week (your stock)")
+    st.markdown(f"#### {t('delivery_section_reference')}")
     schedule = weekly_schedule(
         benchmarks,
         products_in_shop=stocked_products if stocked_products else None,
     )
-    st.dataframe(schedule, width="stretch", hide_index=True)
+    st.dataframe(
+        schedule,
+        width="stretch",
+        hide_index=True,
+        column_config={
+            "Day": st.column_config.TextColumn(t("col_day")),
+            "Deliveries arriving": st.column_config.TextColumn(t("col_deliveries_arriving")),
+            "Best to order / buy": st.column_config.TextColumn(t("col_best_to_order")),
+        },
+    )
     st.download_button(
-        "⬇️ Weekly schedule (CSV)",
+        t("delivery_download_schedule"),
         data=schedule_to_csv(schedule),
         file_name=f"ispaza_weekly_schedule_{today.isoformat()}.csv",
         mime="text/csv",
@@ -821,28 +978,32 @@ with tab_delivery:
 
     st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
-    st.markdown("#### Supplier notes")
+    st.markdown(f"#### {t('delivery_section_supplier_notes')}")
     for sup in suppliers.get("suppliers", []):
         with st.container(border=True):
             channel = sup["channel"].replace("_", " ")
             days = ", ".join(sup.get("delivery_days", [])) or "—"
             transport = float(sup.get("transport_cost_rand", 0) or 0)
             min_order = float(sup.get("min_order_rand", 0) or 0)
-            transport_str = f"R{transport:.0f}" if transport else "free"
+            lead_days = int(sup.get("lead_time_days", 0))
+            transport_str = f"R{transport:.0f}" if transport else t("delivery_transport_free")
             min_order_str = (
-                f"R{min_order:.0f} minimum" if min_order else "no minimum"
+                t("delivery_min_order_value", value=min_order)
+                if min_order
+                else t("delivery_min_order_none")
             )
             st.markdown(
                 f"**{sup['name']}** · _{channel}_  \n"
-                f"**Delivers:** {days} · **Best to order:** "
+                f"**{t('delivery_supplier_delivers')}:** {days} · "
+                f"**{t('delivery_supplier_best_to_order')}:** "
                 f"{sup.get('best_order_day', '—')} · "
-                f"**Lead time:** {sup.get('lead_time_days', 0)} day"
-                f"{'s' if sup.get('lead_time_days', 0) != 1 else ''}  \n"
-                f"**Transport:** {transport_str} · {min_order_str}"
+                f"**{t('delivery_supplier_lead_time')}:** "
+                f"{lead_days} day{'s' if lead_days != 1 else ''}  \n"
+                f"**{t('delivery_supplier_transport')}:** {transport_str} · {min_order_str}"
             )
             products_line = ", ".join(sup.get("products", []))
             if products_line:
-                st.caption(f"Products: {products_line}")
+                st.caption(f"{t('delivery_supplier_products')}: {products_line}")
             notes = sup.get("notes")
             if notes:
                 st.markdown(f"_{notes}_")
@@ -852,7 +1013,7 @@ with tab_delivery:
 
 
 with tab_browse:
-    st.subheader("Browse Products — pick something to add to your stock")
+    st.subheader(t("browse_subhead"))
 
     catalog = cached_catalog_df()
     categories = list_categories(cached_benchmarks())
@@ -860,11 +1021,7 @@ with tab_browse:
     st.markdown(
         f"""
         <div class="info-banner accent">
-          🛍️ The catalogue covers <strong>{len(catalog)} products</strong>
-          across {len(categories)} categories, each with cost price,
-          township median price, margin, supplier, and best purchase day.
-          Click <em>Add to my stock</em> on any card and the product
-          appears on the <em>Get Advice</em> tab.
+          {t("browse_banner", count=len(catalog), cats=len(categories))}
         </div>
         """,
         unsafe_allow_html=True,
@@ -873,14 +1030,14 @@ with tab_browse:
     search_col, cat_col = st.columns([3, 4], gap="large")
     with search_col:
         st.session_state.browse_query = st.text_input(
-            "Search products, suppliers, or categories",
+            t("browse_search_label"),
             value=st.session_state.browse_query,
-            placeholder="e.g. bread, Coca-Cola, snacks",
+            placeholder=t("browse_search_placeholder"),
             key="browse_query_input",
         )
     with cat_col:
         st.session_state.browse_categories = st.multiselect(
-            "Filter by category",
+            t("browse_filter_label"),
             options=categories,
             default=st.session_state.browse_categories,
             key="browse_categories_input",
@@ -892,15 +1049,15 @@ with tab_browse:
         categories=st.session_state.browse_categories,
     )
 
-    st.caption(
-        f"Showing **{len(filtered)}** of {len(catalog)} products."
-        + (" Clear filters to see everything." if len(filtered) < len(catalog) else "")
-    )
+    count_caption = t("browse_count_caption", shown=len(filtered), total=len(catalog))
+    if len(filtered) < len(catalog):
+        count_caption += t("browse_count_clear_hint")
+    st.caption(count_caption)
 
     st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
     if filtered.empty:
-        st.warning("No products match your filters.")
+        st.warning(t("browse_no_match"))
     else:
         per_row = 3
         rows = (len(filtered) + per_row - 1) // per_row
@@ -918,19 +1075,16 @@ with tab_browse:
                             f"<div><strong>{row['Product']}</strong></div>"
                             f"<div class='price'>R{row['Median price (R)']:.2f}"
                             f" <span class='margin'>"
-                            f"· cost R{row['Cost (R)']:.2f}"
-                            f" · margin {row['Margin %']:.1f}%"
+                            f"{t('browse_card_cost_margin', cost=row['Cost (R)'], margin=row['Margin %'])}"
                             f"</span></div>"
                             f"<div class='meta'>"
-                            f"{row['Category'].title()} · "
-                            f"{row['Range (R)']}"
+                            f"{t('browse_card_category_range', category=row['Category'].title(), range=row['Range (R)'])}"
                             f"</div>"
                             f"<div class='meta'>"
-                            f"Supplier: {row['Supplier']}"
+                            f"{t('browse_card_supplier', supplier=row['Supplier'])}"
                             f"</div>"
                             f"<div class='meta'>"
-                            f"Best day: {row['Best day']} · "
-                            f"pack of {row['Pack size']}"
+                            f"{t('browse_card_best_pack', best_day=row['Best day'], pack_size=row['Pack size'])}"
                             f"</div>"
                             f"</div>",
                             unsafe_allow_html=True,
@@ -938,7 +1092,7 @@ with tab_browse:
                         add_col, qty_col = st.columns([3, 2])
                         with qty_col:
                             qty = st.number_input(
-                                "Qty",
+                                t("browse_qty_label"),
                                 min_value=1,
                                 value=int(row["Pack size"]),
                                 step=1,
@@ -947,7 +1101,7 @@ with tab_browse:
                             )
                         with add_col:
                             if st.button(
-                                "➕ Add to my stock",
+                                t("browse_add_button"),
                                 key=f"browse_add_{row['Product']}",
                                 width="stretch",
                             ):
@@ -957,23 +1111,173 @@ with tab_browse:
                                     int(qty),
                                 )
                                 st.toast(
-                                    f"Added {int(qty)} × {row['Product']} to stock.",
+                                    t("browse_add_toast", qty=int(qty), product=row["Product"]),
                                     icon="🛒",
                                 )
 
     st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
-    with st.expander("📋 Full catalogue table"):
+    with st.expander(t("browse_full_table")):
         st.dataframe(
             filtered if not filtered.empty else catalog,
             width="stretch",
             hide_index=True,
             column_config={
-                "Cost (R)": st.column_config.NumberColumn(format="R%.2f"),
-                "Median price (R)": st.column_config.NumberColumn(format="R%.2f"),
-                "Margin %": st.column_config.NumberColumn(format="%.1f%%"),
+                "Product": st.column_config.TextColumn(t("col_product")),
+                "Category": st.column_config.TextColumn(t("col_category")),
+                "Cost (R)": st.column_config.NumberColumn(t("col_cost"), format="R%.2f"),
+                "Median price (R)": st.column_config.NumberColumn(t("col_median_price"), format="R%.2f"),
+                "Margin %": st.column_config.NumberColumn(t("col_margin_pct"), format="%.1f%%"),
+                "Range (R)": st.column_config.TextColumn(t("col_range")),
+                "Supplier": st.column_config.TextColumn(t("col_supplier")),
+                "Best day": st.column_config.TextColumn(t("col_best_day")),
+                "Pack size": st.column_config.NumberColumn(t("col_pack_size")),
+                "Complements": st.column_config.TextColumn(t("col_complements")),
             },
         )
+
+
+# ----- Tab 5: Help & Reports -----------------------------------------------
+
+
+with tab_help:
+    st.subheader(t("help_subhead"))
+
+    st.markdown(
+        f"<div class='info-banner accent'>{t('help_intro')}</div>",
+        unsafe_allow_html=True,
+    )
+
+    # Localised <-> internal mappings for the form controls.
+    cat_to_label = {
+        "advice": t("help_cat_advice"),
+        "pricing": t("help_cat_pricing"),
+        "delivery": t("help_cat_delivery"),
+        "bug": t("help_cat_bug"),
+        "other": t("help_cat_other"),
+    }
+    label_to_cat = {v: k for k, v in cat_to_label.items()}
+
+    pri_to_label = {
+        "low": t("help_priority_low"),
+        "medium": t("help_priority_medium"),
+        "high": t("help_priority_high"),
+    }
+    label_to_pri = {v: k for k, v in pri_to_label.items()}
+
+    status_to_label = {
+        "open": t("help_status_open"),
+        "in_progress": t("help_status_in_progress"),
+        "resolved": t("help_status_resolved"),
+    }
+    label_to_status = {v: k for k, v in status_to_label.items()}
+
+    # ----- New ticket form -------------------------------------------------
+
+    with st.form("new_ticket_form", border=True, clear_on_submit=True):
+        st.markdown(f"#### {t('help_new_ticket')}")
+        new_subject = st.text_input(t("help_field_subject"))
+        cat_col, pri_col = st.columns(2)
+        with cat_col:
+            new_cat_label = st.selectbox(
+                t("help_field_category"),
+                options=list(cat_to_label.values()),
+                index=4,  # default to "Other"
+            )
+        with pri_col:
+            new_pri_label = st.selectbox(
+                t("help_field_priority"),
+                options=list(pri_to_label.values()),
+                index=1,  # default to medium
+            )
+        new_description = st.text_area(t("help_field_description"), height=120)
+        submitted_new = st.form_submit_button(t("help_btn_submit"), type="primary")
+        if submitted_new:
+            try:
+                new_t = create_ticket(
+                    subject=new_subject,
+                    description=new_description,
+                    category=label_to_cat.get(new_cat_label, "other"),
+                    priority=label_to_pri.get(new_pri_label, "medium"),
+                    locale=st.session_state.locale,
+                    existing=st.session_state.tickets,
+                )
+                st.session_state.tickets.append(new_t)
+                st.toast(t("help_toast_submitted", id=new_t.id), icon="🆘")
+            except ValueError:
+                st.error(t("help_subject_required"))
+
+    st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
+
+    # ----- Ticket list + status filter ------------------------------------
+
+    list_col, filter_col = st.columns([3, 1])
+    with list_col:
+        st.markdown(f"#### {t('help_your_tickets')}")
+    with filter_col:
+        filter_choices = [t("help_filter_all")] + list(status_to_label.values())
+        chosen_filter = st.selectbox(
+            t("help_filter_status"),
+            options=filter_choices,
+            index=0,
+            label_visibility="visible",
+        )
+        active_status = (
+            label_to_status[chosen_filter]
+            if chosen_filter in label_to_status
+            else None
+        )
+
+    visible_tickets = filter_by_status(st.session_state.tickets, active_status)
+
+    if not visible_tickets:
+        st.info(t("help_no_tickets"))
+    else:
+        # Render each ticket as a card with subject, badges, body, and an
+        # "Update status" button that cycles open → in_progress → resolved.
+        for tk in sorted(
+            visible_tickets,
+            key=lambda x: ({"high": 0, "medium": 1, "low": 2}.get(x.priority, 99),
+                           -x.created.timestamp()),
+        ):
+            status_pill = status_to_label.get(tk.status, tk.status)
+            priority_pill = pri_to_label.get(tk.priority, tk.priority)
+            category_pill = cat_to_label.get(tk.category, tk.category)
+            with st.container(border=True):
+                top_l, top_r = st.columns([4, 1])
+                with top_l:
+                    st.markdown(
+                        f"**#{tk.id} · {tk.subject}**  \n"
+                        f"<span style='color:#555;font-size:0.85rem'>"
+                        f"{category_pill} · {priority_pill} · "
+                        f"{status_pill} · {tk.created.strftime('%Y-%m-%d %H:%M')}"
+                        f"</span>",
+                        unsafe_allow_html=True,
+                    )
+                with top_r:
+                    if st.button(
+                        t("help_btn_update_status"),
+                        key=f"help_status_btn_{tk.id}",
+                        width="stretch",
+                    ):
+                        st.session_state.tickets = update_status(
+                            st.session_state.tickets, tk.id
+                        )
+                        st.rerun()
+                if tk.description:
+                    st.markdown(tk.description)
+                if tk.context:
+                    with st.expander("Context"):
+                        st.json(tk.context)
+
+    st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
+
+    st.download_button(
+        t("help_btn_download"),
+        data=tickets_to_csv(st.session_state.tickets),
+        file_name=f"ispaza_tickets_{date.today().isoformat()}.csv",
+        mime="text/csv",
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -981,7 +1285,6 @@ with tab_browse:
 # ---------------------------------------------------------------------------
 
 st.markdown(
-    "<div class='footer'>iSpaza · Built for the IEB TechWays AI Hackathon 2026 · "
-    "Team Grade 10</div>",
+    f"<div class='footer'>{t('footer')}</div>",
     unsafe_allow_html=True,
 )
