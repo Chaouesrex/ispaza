@@ -1,0 +1,18 @@
+# Environment
+.env
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Local Claude tooling — keep launch.json local
+.claude/

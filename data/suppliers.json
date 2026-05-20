@@ -1,0 +1,61 @@
+{
+  "region": "Gauteng townships (Soweto, Diepsloot, Alexandra reference)",
+  "suppliers": [
+    {
+      "name": "Sasko bakery route",
+      "channel": "direct_delivery",
+      "delivery_days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "best_order_day": "Daily",
+      "lead_time_days": 0,
+      "transport_cost_rand": 0,
+      "min_order_rand": 0,
+      "products": ["White bread loaf", "Brown bread loaf"],
+      "notes": "Driver arrives early (typically 06:00-08:00). Take a bigger drop on Friday and Saturday for the weekend rush. No Sunday route. Transport is free — built into the loaf price."
+    },
+    {
+      "name": "Coca-Cola SA depot",
+      "channel": "direct_delivery",
+      "delivery_days": ["Tuesday", "Thursday"],
+      "best_order_day": "Monday",
+      "lead_time_days": 1,
+      "transport_cost_rand": 0,
+      "min_order_rand": 500,
+      "products": ["Coca-Cola 500ml", "Fanta 500ml"],
+      "notes": "Phone order by 14:00 the day before delivery. Free delivery on orders over R500. Bigger discount on full-case (24) orders, volume discount kicks in at 3+ cases."
+    },
+    {
+      "name": "Simba (PepsiCo) rep",
+      "channel": "direct_delivery",
+      "delivery_days": ["Wednesday"],
+      "best_order_day": "Tuesday",
+      "lead_time_days": 1,
+      "transport_cost_rand": 0,
+      "min_order_rand": 300,
+      "products": ["Niknaks 30g", "Simba chips 36g"],
+      "notes": "Rep route is weekly — miss the Wednesday window and you wait a full week. Confirm order Monday or Tuesday morning. Free delivery on minimum R300 orders."
+    },
+    {
+      "name": "Jumbo Cash & Carry",
+      "channel": "cash_and_carry",
+      "delivery_days": ["Tuesday", "Wednesday"],
+      "best_order_day": "Tuesday",
+      "lead_time_days": 0,
+      "transport_cost_rand": 80,
+      "min_order_rand": 0,
+      "products": [
+        "Cadbury Lunch Bar 48g",
+        "Oros 2L cordial",
+        "Rama margarine 500g",
+        "Iwisa maize meal 2.5kg",
+        "Tastic rice 1kg",
+        "Maggi 2-min noodles",
+        "Joko tea bags 100s",
+        "Lucky Star pilchards",
+        "Sunlight bar soap",
+        "Surf washing powder 500g",
+        "Toilet rolls 6pk"
+      ],
+      "notes": "Owner collects in person. Tue and Wed mornings beat the weekend rush — better stock and shorter queues. Typical taxi fare per trip ≈ R80. Saturday is a tax on your time."
+    }
+  ]
+}
