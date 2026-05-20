@@ -98,6 +98,7 @@ CRITICAL_KEYS = frozenset({
     "auth_have_account", "auth_need_account",
     "auth_failed", "auth_signed_in_as", "auth_signout_btn",
     "profit_current_stock_sales_section",
+    "footer_ai_disclaimer", "footer_terms_link", "footer_terms_title",
 })
 
 

@@ -11,7 +11,10 @@ from support import (
     CATEGORIES,
     PRIORITIES,
     STATUSES,
+    SUPPORT_EMAIL,
     Ticket,
+    build_bulk_mailto_url,
+    build_mailto_url,
     create_ticket,
     cycle_status,
     default_tickets,
@@ -296,6 +299,71 @@ def test_tickets_to_csv_has_header_and_one_row_per_ticket():
 # ---------------------------------------------------------------------------
 # Seed data
 # ---------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------
+# mailto handoff
+# ---------------------------------------------------------------------------
+
+
+def _sample_ticket(**overrides) -> Ticket:
+    defaults = dict(
+        id=7,
+        subject="Test ticket",
+        description="Details go here",
+        category="bug",
+        priority="high",
+        status="open",
+        locale="en",
+        created=datetime(2026, 5, 20, 12, 30, 0),
+        context={"advice_id": "abc"},
+    )
+    defaults.update(overrides)
+    return Ticket(**defaults)
+
+
+def test_support_email_is_correct_recipient():
+    assert SUPPORT_EMAIL == "dmartin@centennialschools.co.za"
+
+
+def test_build_mailto_url_defaults_to_support_email():
+    url = build_mailto_url(_sample_ticket())
+    assert url.startswith("mailto:dmartin@centennialschools.co.za?")
+
+
+def test_build_mailto_url_includes_ticket_id_and_subject():
+    url = build_mailto_url(_sample_ticket(id=42, subject="Bread sold out"))
+    # URL-encoded: spaces → %20
+    assert "%5Bspazi%20shops%20%2342%5D%20Bread%20sold%20out" in url
+
+
+def test_build_mailto_url_includes_description_and_context():
+    url = build_mailto_url(_sample_ticket(description="Niknaks vanished"))
+    assert "Niknaks%20vanished" in url
+    assert "advice_id" in url  # JSON dump of context.
+
+
+def test_build_mailto_url_accepts_custom_recipient():
+    url = build_mailto_url(_sample_ticket(), recipient="other@example.com")
+    assert url.startswith("mailto:other@example.com?")
+
+
+def test_build_bulk_mailto_url_lists_every_ticket():
+    tickets = [
+        _sample_ticket(id=1, subject="One"),
+        _sample_ticket(id=2, subject="Two"),
+    ]
+    url = build_bulk_mailto_url(tickets)
+    # Each ticket id should appear in the body
+    assert "%231" in url and "%232" in url
+    # Subject mentions count
+    assert "2%20tickets" in url
+
+
+def test_build_bulk_mailto_url_handles_empty_list():
+    url = build_bulk_mailto_url([])
+    assert url.startswith("mailto:dmartin@centennialschools.co.za?")
+    assert "0%20tickets" in url
 
 
 def test_default_tickets_returns_three_with_workflow_coverage():

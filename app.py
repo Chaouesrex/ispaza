@@ -50,6 +50,9 @@ from support import (
     CATEGORIES,
     PRIORITIES,
     STATUSES,
+    SUPPORT_EMAIL,
+    build_bulk_mailto_url,
+    build_mailto_url,
     create_ticket,
     default_tickets,
     filter_by_status,
@@ -322,6 +325,21 @@ st.markdown(
         color: {MUTED};
         font-size: 0.85rem;
         text-align: center;
+      }}
+      .footer .ai-disclaimer {{
+        display: inline-block;
+        margin-top: 0.5rem;
+        padding: 0.45rem 0.95rem;
+        background: {ACCENT_GOLD_SOFT};
+        border: 1px solid {ACCENT_GOLD};
+        border-radius: 999px;
+        color: #6e5300;
+        font-size: 0.83rem;
+        font-weight: 600;
+      }}
+      .footer .brand-line {{
+        font-weight: 600;
+        color: {INK};
       }}
       .section-divider {{
         height: 1px;
@@ -711,6 +729,9 @@ if "help_status_filter" not in st.session_state:
 if "show_report_form" not in st.session_state:
     st.session_state.show_report_form = False
 
+if "last_submitted_ticket_id" not in st.session_state:
+    st.session_state.last_submitted_ticket_id = None
+
 
 # ---------------------------------------------------------------------------
 # Sidebar
@@ -1007,6 +1028,7 @@ with tab_advice:
                             existing=st.session_state.tickets,
                         )
                         st.session_state.tickets.append(new)
+                        st.session_state.last_submitted_ticket_id = new.id
                         st.session_state.show_report_form = False
                         st.toast(
                             t("help_toast_submitted", id=new.id),
@@ -1652,6 +1674,45 @@ with tab_help:
         unsafe_allow_html=True,
     )
 
+    # ----- FAQ (quick answers before users open a ticket) ------------------
+
+    st.markdown(f"#### ❓ {t('help_faq_section')}")
+    faq_items = [
+        ("What is spazi shops?",
+         "An AI-assisted advisor for South African spaza shop owners. "
+         "Enter your stock and last week's sales — the app tells you "
+         "what to restock, what to reprice, and what new product to try, "
+         "in either a worded brief or a one-line quick-actions table."),
+        ("Does it need internet or an API key?",
+         "No. The recommender runs locally and deterministically — no "
+         "external services, no API keys, no rate limits. The same code "
+         "runs on a laptop and on Streamlit Community Cloud."),
+        ("Where does the pricing data come from?",
+         "Township benchmarks for Gauteng (Soweto / Diepsloot / Alexandra "
+         "reference), bundled in `data/benchmarks.json`. The numbers are "
+         "realistic but you should verify against your local market before "
+         "acting on a pricing nudge."),
+        ("How do I change the language?",
+         "Use the language picker at the top of the sidebar. All 11 "
+         "official South African languages are listed. English, Afrikaans, "
+         "isiZulu, and isiXhosa are fully translated; the other seven cover "
+         "the critical UI surface with English fallback for body copy."),
+        ("Are my tickets and data saved permanently?",
+         "No — Streamlit Community Cloud has an ephemeral filesystem, so "
+         "everything lives in your browser session and resets on restart. "
+         "Use the CSV download buttons to keep your own copy of tickets, "
+         "purchases, sales, and the ledger."),
+        ("Who do I contact for help?",
+         f"Open a ticket below — it lives in your session, and you can "
+         f"email it to support in one click. The maintainer's address is "
+         f"`{SUPPORT_EMAIL}`."),
+    ]
+    for q, a in faq_items:
+        with st.expander(q):
+            st.markdown(a)
+
+    st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
+
     # Localised <-> internal mappings for the form controls.
     cat_to_label = {
         "advice": t("help_cat_advice"),
@@ -1707,9 +1768,25 @@ with tab_help:
                     existing=st.session_state.tickets,
                 )
                 st.session_state.tickets.append(new_t)
+                st.session_state.last_submitted_ticket_id = new_t.id
                 st.toast(t("help_toast_submitted", id=new_t.id), icon="🆘")
             except ValueError:
                 st.error(t("help_subject_required"))
+
+    # If a ticket was just submitted, show a one-click email handoff so
+    # support can be looped in via the user's own mail client.
+    if st.session_state.last_submitted_ticket_id is not None:
+        last_id = st.session_state.last_submitted_ticket_id
+        latest = next(
+            (tk for tk in st.session_state.tickets if tk.id == last_id),
+            None,
+        )
+        if latest is not None:
+            st.link_button(
+                t("help_email_support_btn", id=last_id),
+                url=build_mailto_url(latest),
+                width="content",
+            )
 
     st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
@@ -1777,12 +1854,22 @@ with tab_help:
 
     st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
-    st.download_button(
-        t("help_btn_download"),
-        data=tickets_to_csv(st.session_state.tickets),
-        file_name=f"ispaza_tickets_{date.today().isoformat()}.csv",
-        mime="text/csv",
-    )
+    dl_col, mail_col = st.columns(2)
+    with dl_col:
+        st.download_button(
+            t("help_btn_download"),
+            data=tickets_to_csv(st.session_state.tickets),
+            file_name=f"ispaza_tickets_{date.today().isoformat()}.csv",
+            mime="text/csv",
+            width="stretch",
+        )
+    with mail_col:
+        if st.session_state.tickets:
+            st.link_button(
+                t("help_email_all_btn"),
+                url=build_bulk_mailto_url(st.session_state.tickets),
+                width="stretch",
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -1790,6 +1877,15 @@ with tab_help:
 # ---------------------------------------------------------------------------
 
 st.markdown(
-    f"<div class='footer'>{t('footer')}</div>",
+    f"""
+    <div class="footer">
+      <div class="ai-disclaimer">{t("footer_ai_disclaimer")}</div>
+      <div class="brand-line">{t("footer")}</div>
+    </div>
+    """,
     unsafe_allow_html=True,
 )
+
+with st.expander(t("footer_terms_link")):
+    st.markdown(f"### {t('footer_terms_title')}")
+    st.markdown(t("footer_terms_body"))

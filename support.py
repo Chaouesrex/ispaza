@@ -25,9 +25,11 @@ A ticket carries:
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Iterable
+from urllib.parse import quote
 
 import pandas as pd
 
@@ -36,6 +38,10 @@ CATEGORIES = ("advice", "pricing", "delivery", "bug", "other")
 PRIORITIES = ("low", "medium", "high")
 STATUSES = ("open", "in_progress", "resolved")
 _STATUS_CYCLE = {"open": "in_progress", "in_progress": "resolved", "resolved": "open"}
+
+# All tickets default to going here. Configurable per call so tests don't
+# need to hard-code the address.
+SUPPORT_EMAIL = "dmartin@centennialschools.co.za"
 
 
 # ---------------------------------------------------------------------------
@@ -194,6 +200,58 @@ def filter_by_status(
 
 def tickets_to_csv(tickets: Iterable[Ticket]) -> bytes:
     return tickets_to_df(tickets).to_csv(index=False).encode("utf-8")
+
+
+# ---------------------------------------------------------------------------
+# Email handoff via mailto: links
+# ---------------------------------------------------------------------------
+#
+# Streamlit Community Cloud has no built-in SMTP and configuring a transactional
+# email provider takes credentials we don't want to ship in the repo. The
+# pragmatic ship is a ``mailto:`` link that opens the user's mail client with
+# subject and body pre-filled. They click Send, and the ticket lands in
+# support's inbox via the user's own email provider. No secrets needed,
+# works in every browser, sender identity is unambiguous.
+
+
+def build_mailto_url(ticket: Ticket, recipient: str = SUPPORT_EMAIL) -> str:
+    """Return a ``mailto:`` URL that opens a pre-filled email for the ticket."""
+    subject = f"[spazi shops #{ticket.id}] {ticket.subject}"
+    context_block = (
+        json.dumps(ticket.context, indent=2)
+        if ticket.context
+        else "(none)"
+    )
+    body = (
+        f"Ticket ID: {ticket.id}\n"
+        f"Submitted:  {ticket.created.isoformat(timespec='seconds')}\n"
+        f"Category:   {ticket.category}\n"
+        f"Priority:   {ticket.priority}\n"
+        f"Status:     {ticket.status}\n"
+        f"Locale:     {ticket.locale}\n"
+        f"\n"
+        f"--- Description ---\n"
+        f"{ticket.description or '(none)'}\n"
+        f"\n"
+        f"--- Context ---\n"
+        f"{context_block}\n"
+    )
+    return f"mailto:{recipient}?subject={quote(subject)}&body={quote(body)}"
+
+
+def build_bulk_mailto_url(
+    tickets: Iterable[Ticket], recipient: str = SUPPORT_EMAIL
+) -> str:
+    """Return a ``mailto:`` URL covering every supplied ticket in one message."""
+    tickets = list(tickets)
+    subject = f"[spazi shops] {len(tickets)} ticket{'s' if len(tickets) != 1 else ''}"
+    lines: list[str] = []
+    for t in tickets:
+        lines.append(f"#{t.id} · {t.subject}  [{t.status}/{t.priority}/{t.category}]")
+        lines.append(f"  {t.description or '(no description)'}")
+        lines.append("")
+    body = "\n".join(lines) if lines else "(no tickets)"
+    return f"mailto:{recipient}?subject={quote(subject)}&body={quote(body)}"
 
 
 # ---------------------------------------------------------------------------

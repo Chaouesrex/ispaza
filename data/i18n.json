@@ -190,7 +190,16 @@
     "auth_failed": "That username or password doesn't match.",
     "auth_demo_hint": "Try the demo: <code>demo</code> / <code>spazi2026</code>",
     "auth_signed_in_as": "Signed in as",
-    "auth_signout_btn": "Sign out"
+    "auth_signout_btn": "Sign out",
+    "footer_ai_disclaimer": "⚠️ AI can make mistakes — always verify before acting on advice.",
+    "footer_terms_link": "Terms & Conditions",
+    "footer_terms_title": "Terms & Conditions",
+    "footer_terms_body": "**Last updated: 2026-05-20**\n\nBy using spazi shops you agree to the following terms.\n\n**1. Demo / Hackathon Build**  \nThis is a prototype built for the IEB TechWays AI Hackathon 2026. It is not a production product. Features may change, data may be lost on restart, and downtime can happen without notice.\n\n**2. AI-Generated Recommendations**  \nThe advice, prices, schedules and trip plans shown here are produced by deterministic algorithms running on your device, using anonymised benchmark data for South African townships. They are starting points — not professional financial, accounting, or commercial advice. Always verify prices, suppliers, and quantities against your own records and local conditions before acting.\n\n**3. No Warranty**  \nspazi shops is provided *as is*, without warranty of any kind. We make no guarantees about accuracy, availability, fitness for a particular purpose, or financial outcomes.\n\n**4. No Liability**  \nWe are not liable for any direct or indirect loss arising from your use of this app, including business decisions made on the basis of any output.\n\n**5. Data & Privacy**  \nEverything you enter — stock, sales, purchases, tickets, account credentials — is stored only in your browser session. Nothing is sent to a server, no analytics, no tracking, no cookies beyond what Streamlit requires to render the page. Closing the tab erases the session.\n\n**6. Intellectual Property**  \nBrand names, logos, and trademarks referenced in the catalogue (Coca-Cola, Niknaks, Simba, Sasko, Jumbo Cash & Carry, etc.) belong to their respective owners and are referenced here for product-identification purposes only. The spazi shops codebase itself is released as open source via GitHub.\n\n**7. Acceptable Use**  \nDon't try to extract or redistribute the recommender's logic for resale. Don't impersonate other users in the ticket system. Don't submit content that is illegal, harassing, or harmful.\n\n**8. Changes**  \nWe may update these terms at any time. Continued use after a change constitutes acceptance.\n\n**9. Contact**  \nOpen a ticket on the Help & Reports tab.",
+    "footer_tos_link": "Terms & Conditions",
+    "tos_body": "These tools provide AI-assisted suggestions based on the inputs you enter. The recommender is rule-based, runs locally, and **does not constitute financial, legal, or tax advice**. spazi shops makes no warranty regarding the accuracy of pricing benchmarks, supplier patterns, or recommendations — verify against your local market before acting.\n\n**Data**: tickets, sales logs, purchase logs and ledger entries are session-scoped and reset when you sign out or refresh. Use the CSV exports to keep your own records.\n\n**Support**: emailing a ticket opens your own mail client — the message is sent under your email identity, not ours.\n\nBy using this app you agree that spazi shops, its maintainers, and the IEB TechWays AI Hackathon organisers are not liable for any business outcome resulting from use of the app.",
+    "help_faq_section": "Frequently asked questions",
+    "help_email_support_btn": "📧 Email ticket #{id} to support",
+    "help_email_all_btn": "📧 Email all my tickets to support"
   },
   "zu": {
     "language_label": "Ulimi",
@@ -383,7 +392,16 @@
     "auth_failed": "Igama lomsebenzisi noma iphasiwedi ayilungile.",
     "auth_demo_hint": "Zama idemo: <code>demo</code> / <code>spazi2026</code>",
     "auth_signed_in_as": "Ungene njenge",
-    "auth_signout_btn": "Phuma"
+    "auth_signout_btn": "Phuma",
+    "footer_ai_disclaimer": "⚠️ I-AI ingenza amaphutha — hlola njalo ngaphambi kokuthatha isinyathelo.",
+    "footer_terms_link": "📜 Imibandela Nemigomo",
+    "footer_terms_title": "Imibandela Nemigomo",
+    "footer_tos_link": "Imibandela Nemigomo",
+    "tos_body": "Lawa mathuluzi ahlinzeka ngezeluleko ezilekelelwa yi-AI ezisuselwa kulokho okufakayo. Isiluleko sisuselwa emithethweni, siyasebenza ngaphandle kwe-inthanethi, **futhi ayisiseluleko sezimali, sezomthetho, noma sentela**. I-spazi shops ayinasiqinisekiso ngokunemba kwamanani — qinisekisa endaweni yakho ngaphambi kokuthatha isinyathelo.\n\n**Idatha**: amathikithi nemibhalo ihlala esikhathini sokufinyelela, kususwa lapho uphuma noma uvuselela ikhasi. Sebenzisa i-CSV ukuze ugcine amarekhodi akho.\n\n**Usizo**: ukuthumela ithikithi nge-imeyili kuvula i-imeyili yakho — umyalezo uthunyelwa egameni lakho hhayi elethu.\n\nNgokusebenzisa lolu hlelo lokusebenza uyavuma ukuthi i-spazi shops nabasunguli abasolisi ngalokho okwenzeka ebhizinisini okususelwa ekusebenziseni kwakho lolu hlelo.",
+    "help_faq_section": "Imibuzo ebuzwa njalo",
+    "help_email_support_btn": "📧 Thumela ithikithi #{id} ku-usizo",
+    "help_email_all_btn": "📧 Thumela wonke amathikithi ku-usizo",
+    "footer_terms_body": "**Kubuyekezwe kokugcina: 2026-05-20**\n\nNgokusebenzisa i-spazi shops uyavuma le mibandela elandelayo.\n\n**1. Idemo / I-Hackathon Build**  \nLokhu kuprototype eyakhelwe i-IEB TechWays AI Hackathon 2026. Akuwona umkhiqizo wokuthengiswa.\n\n**2. Iziphakamiso ezenziwe yi-AI**  \nIseluleko, amanani, izinhlelo nezinhlelo zohambo eziboniswa lapha kukhiqizwa ama-algorithms ahlala kudivayisi yakho. Lokhu kuyizindawo zokuqala — akuyona iseluleko sezimali noma lezamabhizinisi. Hlola amanani, abathengisi, namanani ngokwakho ngaphambi kokwenza isinyathelo.\n\n**3. Akukho Siqinisekiso**  \nI-spazi shops inikezwa *njengoba injalo*, ngaphandle kwesiqinisekiso.\n\n**4. Akukho Sibhekiseli**  \nAsibhekiseli kunoma yikuphi ukulahleka okuqondile noma okungaqondile okuvela ekusebenziseni kwakho lolu hlelo lokusebenza.\n\n**5. Idatha Nobumfihlo**  \nKonke okufakayo kugcinwa kuphela esikhathini sebrawuza yakho. Akukho okuthunyelwayo kuseva, akukho ukulandelelwa.\n\n**6. Impahla Yobuhlakani**  \nAmabhrendi noma izimpawu zokuhweba okukhulunywe ngazo ekhathalogu (Coca-Cola, Niknaks, Sasko, njll.) zezabanikazi bazo.\n\n**7. Ukusetshenziswa Okufanele**  \nUngazami ukukhipha noma ukusabalalisa imithetho yesiluleko ukuze uthengise. Ungafaki okuthile okungekho emthethweni noma okulimazayo.\n\n**8. Izinguquko**  \nSingabuyekeza le mibandela noma kunini. Ukuqhubeka usebenzisa ngemva kokushintshwa kuyavumelana.\n\n**9. Xhumana**  \nVula ithikithi kuthebhu ye-Usizo Nemibiko."
   },
   "xh": {
     "language_label": "Ulwimi",
@@ -576,7 +594,16 @@
     "auth_failed": "Igama okanye iphaswedi ayichanekanga.",
     "auth_demo_hint": "Zama idemo: <code>demo</code> / <code>spazi2026</code>",
     "auth_signed_in_as": "Ungene njenge",
-    "auth_signout_btn": "Phuma"
+    "auth_signout_btn": "Phuma",
+    "footer_ai_disclaimer": "⚠️ I-AI ingenza iimpazamo — hlola njalo ngaphambi kokuthi uthathe inyathelo.",
+    "footer_terms_link": "📜 Imimiselo Nemiqathango",
+    "footer_terms_title": "Imimiselo Nemiqathango",
+    "footer_tos_link": "Imimiselo Nemiqathango",
+    "tos_body": "Ezi zixhobo zinikeza iicebiso ezincediswa yi-AI ezisekelwe kuoko okungenisayo. Umcebisi usekelwe kwimithetho, usebenza ngaphandle kwentanethi, kwaye **ayisiyiyo icebiso lezezimali, lomthetho okanye lerhafu**. i-spazi shops ayiqinisekisi ukuchaneka kwamaxabiso — qinisekisa kwindawo yakho ngaphambi kokwenza isenzo.\n\n**Idatha**: amatikiti nemibhalo ihleli kwiseshini, ihlanjululwa xa uphuma okanye uvuselela. Sebenzisa ukukhuphela i-CSV ukugcina iirekhodi zakho.\n\n**Inkxaso**: ukuthumela itikiti nge-imeyile kuvula i-imeyile yakho — umyalezo uthunyelwa egameni lakho.\n\nNgokusebenzisa olu hlelo lokusebenza uyavuma ukuba i-spazi shops nabaqulunqi abasolisi ngeziphumo zoshishino ezivela kuhuhlobo lokusebenzisa olu hlelo.",
+    "help_faq_section": "Imibuzo ebuzwa rhoqo",
+    "help_email_support_btn": "📧 Thumela itikiti #{id} kwinkxaso",
+    "help_email_all_btn": "📧 Thumela onke amatikiti kwinkxaso",
+    "footer_terms_body": "**Ihlaziywe okokugqibela: 2026-05-20**\n\nNgokusebenzisa i-spazi shops uyavuma le mimiselo ilandelayo.\n\n**1. Idemo / I-Hackathon Build**  \nLo ngumzekelo wokuqala owenzelwe i-IEB TechWays AI Hackathon 2026. Asisiyiyo imveliso yokuthengisa.\n\n**2. Iicebiso ezivelisiweyo yi-AI**  \nIicebiso, amaxabiso, iicwangciso neenkqubo zohambo ezivela apha ziveliswe yi-algorithms ehlala kwidivayisi yakho. Zibalulekile njengeendawo zokuqala — azisiyiyo icebiso lezezimali okanye loshishino. Qinisekisa amaxabiso, ababoneleli, kunye namanani ngokwakho ngaphambi kokwenza isenzo.\n\n**3. Akukho Siqinisekiso**  \ni-spazi shops inikezwa *njengoko injalo*, ngaphandle kwesiqinisekiso.\n\n**4. Akukho Buxanduva**  \nAsinabuxanduva nakuyiphi nayiphi ilahleko evela ekusebenziseni kwakho.\n\n**5. Idatha Nobumfihlo**  \nKonke okungenisayo kugcinwa kuphela kwiseshini yakho yebrawuza. Akukho okuthunyelwayo kwiseva, akukho ukulandelelwa.\n\n**6. Iimpahla Zomzimba**  \nAmagama eebhrendi okanye iimpawu zokuthengisa ezinikezelwe kwikhathalogu (Coca-Cola, Niknaks, Sasko, njlnjl.) zezabanini bazo.\n\n**7. Ukusebenzisa Okuvumelekileyo**  \nMusa ukuzama ukukhupha okanye ukusabalalisa ulwazi lwecebiso. Musa ukufaka okungekho mthethweni okanye okuyingozi.\n\n**8. Iinguqulelo**  \nSingahlaziya le mimiselo nangaliphi na ixesha.\n\n**9. Qhagamshelana**  \nVula itikiti kwiThebhu ye-Uncedo Neengxelo."
   },
   "af": {
     "language_label": "Taal",
@@ -769,7 +796,16 @@
     "auth_failed": "Daardie gebruikersnaam of wagwoord stem nie ooreen nie.",
     "auth_demo_hint": "Probeer die demo: <code>demo</code> / <code>spazi2026</code>",
     "auth_signed_in_as": "Aangemeld as",
-    "auth_signout_btn": "Meld af"
+    "auth_signout_btn": "Meld af",
+    "footer_ai_disclaimer": "⚠️ KI kan foute maak — bevestig altyd voordat jy op raad reageer.",
+    "footer_terms_link": "📜 Bepalings en Voorwaardes",
+    "footer_terms_title": "Bepalings en Voorwaardes",
+    "footer_tos_link": "Bepalings en Voorwaardes",
+    "tos_body": "Hierdie hulpmiddels bied KI-ondersteunde voorstelle gebaseer op die invoere wat jy invul. Die aanbeveler is reëlgebaseer, loop plaaslik, en **is nie finansiële, regs- of belasting-advies nie**. spazi shops gee geen waarborg oor die akkuraatheid van pryse, verskafferspatrone of aanbevelings nie — verifieer altyd teen jou plaaslike mark voordat jy optree.\n\n**Data**: kaartjies en logs woon in jou sessie en herstel wanneer jy afmeld of die bladsy verfris. Gebruik die CSV-afladings om jou eie rekords te hou.\n\n**Ondersteuning**: 'n kaartjie e-pos open jou eie pos-kliënt — die boodskap word onder jou e-pos-identiteit gestuur, nie ons s'n nie.\n\nDeur die app te gebruik stem jy in dat spazi shops, sy instandhouers en die IEB TechWays AI Hackathon-organiseerders nie aanspreeklik is vir besigheidsuitkomste uit die gebruik van die app nie.",
+    "help_faq_section": "Gereelde vrae",
+    "help_email_support_btn": "📧 Stuur kaartjie #{id} aan ondersteuning",
+    "help_email_all_btn": "📧 Stuur al my kaartjies aan ondersteuning",
+    "footer_terms_body": "**Laas bygewerk: 2026-05-20**\n\nDeur spazi shops te gebruik stem jy in tot die volgende bepalings.\n\n**1. Demo / Hackathon-bou**  \nHierdie is 'n prototipe gebou vir die IEB TechWays AI Hackathon 2026. Dit is nie 'n produksieproduk nie.\n\n**2. KI-gegenereerde aanbevelings**  \nDie advies, pryse, skedules en ritplanne hier word geproduseer deur algoritmes wat plaaslik op jou toestel loop. Hulle is vertrekpunte — nie professionele finansiële, rekeningkundige, of kommersiële advies nie. Verifieer altyd teen jou eie rekords.\n\n**3. Geen Waarborg**  \nspazi shops word *as is* verskaf, sonder enige waarborg.\n\n**4. Geen Aanspreeklikheid**  \nOns is nie aanspreeklik vir enige direkte of indirekte verlies wat uit jou gebruik van die app voortspruit nie.\n\n**5. Data en Privaatheid**  \nAlles wat jy invul word net in jou blaaier-sessie gestoor. Niks word na 'n bediener gestuur nie, geen volgers, geen koekies buiten dié wat Streamlit benodig om die bladsy te wys.\n\n**6. Intellektuele Eiendom**  \nHandelsname en handelsmerke wat na verwys word (Coca-Cola, Niknaks, Sasko, ens.) behoort aan hul eienaars.\n\n**7. Aanvaarbare Gebruik**  \nMoenie probeer om die aanbeveler se logika uit te haal of te herversprei nie. Moenie ander gebruikers verpersoonlik nie. Moenie onwettige of skadelike inhoud indien nie.\n\n**8. Veranderinge**  \nOns mag hierdie bepalings op enige tyd opdateer. Voortgesette gebruik beteken aanvaarding.\n\n**9. Kontak**  \nOpen 'n kaartjie op die Hulp & Verslae-oortjie."
   },
   "nr": {
     "language_label": "Ilimi",
@@ -876,7 +912,15 @@
     "auth_failed": "Ibizo namkha iphasiwedi okuyiphutha.",
     "auth_demo_hint": "Zama idemo: <code>demo</code> / <code>spazi2026</code>",
     "auth_signed_in_as": "Ungene njenge",
-    "auth_signout_btn": "Phuma"
+    "auth_signout_btn": "Phuma",
+    "footer_ai_disclaimer": "⚠️ I-AI ingenza amaphutha — qiniseka njalo ngaphambi kokuthatha isinyathelo.",
+    "footer_terms_link": "Imigomo Nemibandela",
+    "footer_terms_title": "Imigomo Nemibandela",
+    "footer_tos_link": "Imibandela Nemigomo",
+    "help_faq_section": "Imibuzo evame ukubuzwa",
+    "help_email_support_btn": "📧 Thumela ithikithi #{id} ku-usizo",
+    "help_email_all_btn": "📧 Thumela woke amathikithi ku-usizo",
+    "tos_body": "These tools provide AI-assisted suggestions based on the inputs you enter. The recommender is rule-based, runs locally, and **does not constitute financial, legal, or tax advice**. spazi shops makes no warranty regarding the accuracy of pricing benchmarks, supplier patterns, or recommendations — verify against your local market before acting.\n\n**Data**: tickets, sales logs, purchase logs and ledger entries are session-scoped and reset when you sign out or refresh. Use the CSV exports to keep your own records.\n\n**Support**: emailing a ticket opens your own mail client — the message is sent under your email identity, not ours.\n\nBy using this app you agree that spazi shops, its maintainers, and the IEB TechWays AI Hackathon organisers are not liable for any business outcome resulting from use of the app."
   },
   "ss": {
     "language_label": "Lulwimi",
@@ -983,7 +1027,15 @@
     "auth_failed": "Ligama nome liphasiwedi liphutsekile.",
     "auth_demo_hint": "Zama idemo: <code>demo</code> / <code>spazi2026</code>",
     "auth_signed_in_as": "Ungene njenge",
-    "auth_signout_btn": "Phuma"
+    "auth_signout_btn": "Phuma",
+    "footer_ai_disclaimer": "⚠️ I-AI ingaphazama — cinisekisa njalo ngaphambi kwekutsi utsatse sinyatselo.",
+    "footer_terms_link": "Imigomo Netimo",
+    "footer_terms_title": "Imigomo Netimo",
+    "footer_tos_link": "Imibandela Nemigomo",
+    "help_faq_section": "Imibuto levame kubutwa",
+    "help_email_support_btn": "📧 Tfumela litikiti #{id} elusitfweni",
+    "help_email_all_btn": "📧 Tfumela onkhe ematikiti elusitfweni",
+    "tos_body": "These tools provide AI-assisted suggestions based on the inputs you enter. The recommender is rule-based, runs locally, and **does not constitute financial, legal, or tax advice**. spazi shops makes no warranty regarding the accuracy of pricing benchmarks, supplier patterns, or recommendations — verify against your local market before acting.\n\n**Data**: tickets, sales logs, purchase logs and ledger entries are session-scoped and reset when you sign out or refresh. Use the CSV exports to keep your own records.\n\n**Support**: emailing a ticket opens your own mail client — the message is sent under your email identity, not ours.\n\nBy using this app you agree that spazi shops, its maintainers, and the IEB TechWays AI Hackathon organisers are not liable for any business outcome resulting from use of the app."
   },
   "st": {
     "language_label": "Puo",
@@ -1090,7 +1142,15 @@
     "auth_failed": "Lebitso la mosebedisi kapa phasewete e fosahetseng.",
     "auth_demo_hint": "Leka demo: <code>demo</code> / <code>spazi2026</code>",
     "auth_signed_in_as": "Kene jwalo ka",
-    "auth_signout_btn": "Tswa"
+    "auth_signout_btn": "Tswa",
+    "footer_ai_disclaimer": "⚠️ AI e ka etsa diphoso — netefatsa kamehla pele o nka mehato.",
+    "footer_terms_link": "Melao le Maemo",
+    "footer_terms_title": "Melao le Maemo",
+    "footer_tos_link": "Lipehelo le Mekgwa",
+    "help_faq_section": "Lipotso tse botswang hangata",
+    "help_email_support_btn": "📧 Romella tekete #{id} ho thuso",
+    "help_email_all_btn": "📧 Romella litekete tsohle ho thuso",
+    "tos_body": "These tools provide AI-assisted suggestions based on the inputs you enter. The recommender is rule-based, runs locally, and **does not constitute financial, legal, or tax advice**. spazi shops makes no warranty regarding the accuracy of pricing benchmarks, supplier patterns, or recommendations — verify against your local market before acting.\n\n**Data**: tickets, sales logs, purchase logs and ledger entries are session-scoped and reset when you sign out or refresh. Use the CSV exports to keep your own records.\n\n**Support**: emailing a ticket opens your own mail client — the message is sent under your email identity, not ours.\n\nBy using this app you agree that spazi shops, its maintainers, and the IEB TechWays AI Hackathon organisers are not liable for any business outcome resulting from use of the app."
   },
   "nso": {
     "language_label": "Polelo",
@@ -1197,7 +1257,15 @@
     "auth_failed": "Leina la mošomiši goba phasewete e fošagetšego.",
     "auth_demo_hint": "Leka demo: <code>demo</code> / <code>spazi2026</code>",
     "auth_signed_in_as": "O tsene bjalo ka",
-    "auth_signout_btn": "Tšwa"
+    "auth_signout_btn": "Tšwa",
+    "footer_ai_disclaimer": "⚠️ AI e ka dira diphošo — netefatša ka mehla pele o tšea mehato.",
+    "footer_terms_link": "Melao le Maemo",
+    "footer_terms_title": "Melao le Maemo",
+    "footer_tos_link": "Mabaka le Maemo",
+    "help_faq_section": "Dipotšišo tše botšišwago kgafetša",
+    "help_email_support_btn": "📧 Romela thekete #{id} go thušo",
+    "help_email_all_btn": "📧 Romela dithekete tšohle go thušo",
+    "tos_body": "These tools provide AI-assisted suggestions based on the inputs you enter. The recommender is rule-based, runs locally, and **does not constitute financial, legal, or tax advice**. spazi shops makes no warranty regarding the accuracy of pricing benchmarks, supplier patterns, or recommendations — verify against your local market before acting.\n\n**Data**: tickets, sales logs, purchase logs and ledger entries are session-scoped and reset when you sign out or refresh. Use the CSV exports to keep your own records.\n\n**Support**: emailing a ticket opens your own mail client — the message is sent under your email identity, not ours.\n\nBy using this app you agree that spazi shops, its maintainers, and the IEB TechWays AI Hackathon organisers are not liable for any business outcome resulting from use of the app."
   },
   "tn": {
     "language_label": "Puo",
@@ -1304,7 +1372,15 @@
     "auth_failed": "Leina la modirisi kgotsa phasewete e e fosagetseng.",
     "auth_demo_hint": "Leka demo: <code>demo</code> / <code>spazi2026</code>",
     "auth_signed_in_as": "O tsene jaaka",
-    "auth_signout_btn": "Tswa"
+    "auth_signout_btn": "Tswa",
+    "footer_ai_disclaimer": "⚠️ AI e ka dira diphoso — netefatsa ka metlha pele o tsaya kgato.",
+    "footer_terms_link": "Melao le Maemo",
+    "footer_terms_title": "Melao le Maemo",
+    "footer_tos_link": "Melao le Maemo",
+    "help_faq_section": "Dipotso tse di botsiwang gantsi",
+    "help_email_support_btn": "📧 Romela tekete #{id} go thuso",
+    "help_email_all_btn": "📧 Romela ditekete tsotlhe go thuso",
+    "tos_body": "These tools provide AI-assisted suggestions based on the inputs you enter. The recommender is rule-based, runs locally, and **does not constitute financial, legal, or tax advice**. spazi shops makes no warranty regarding the accuracy of pricing benchmarks, supplier patterns, or recommendations — verify against your local market before acting.\n\n**Data**: tickets, sales logs, purchase logs and ledger entries are session-scoped and reset when you sign out or refresh. Use the CSV exports to keep your own records.\n\n**Support**: emailing a ticket opens your own mail client — the message is sent under your email identity, not ours.\n\nBy using this app you agree that spazi shops, its maintainers, and the IEB TechWays AI Hackathon organisers are not liable for any business outcome resulting from use of the app."
   },
   "ve": {
     "language_label": "Luambo",
@@ -1411,7 +1487,15 @@
     "auth_failed": "Dzina ḽa mushumisi kana phasiwedi a zwo lugi.",
     "auth_demo_hint": "Linga demo: <code>demo</code> / <code>spazi2026</code>",
     "auth_signed_in_as": "No dzhena sa",
-    "auth_signout_btn": "Bvela"
+    "auth_signout_btn": "Bvela",
+    "footer_ai_disclaimer": "⚠️ AI i nga ita zwivhi — linganyisa misi yoṱhe musi ni sa athu shumisa.",
+    "footer_terms_link": "Milayo na Maitelele",
+    "footer_terms_title": "Milayo na Maitelele",
+    "footer_tos_link": "Milayo na Maitele",
+    "help_faq_section": "Mbudziso dzine dza vhudziswa kanzhi",
+    "help_email_support_btn": "📧 Rumela thikhithi #{id} kha thuso",
+    "help_email_all_btn": "📧 Rumela thikhithi dzothe kha thuso",
+    "tos_body": "These tools provide AI-assisted suggestions based on the inputs you enter. The recommender is rule-based, runs locally, and **does not constitute financial, legal, or tax advice**. spazi shops makes no warranty regarding the accuracy of pricing benchmarks, supplier patterns, or recommendations — verify against your local market before acting.\n\n**Data**: tickets, sales logs, purchase logs and ledger entries are session-scoped and reset when you sign out or refresh. Use the CSV exports to keep your own records.\n\n**Support**: emailing a ticket opens your own mail client — the message is sent under your email identity, not ours.\n\nBy using this app you agree that spazi shops, its maintainers, and the IEB TechWays AI Hackathon organisers are not liable for any business outcome resulting from use of the app."
   },
   "ts": {
     "language_label": "Ririmi",
@@ -1518,6 +1602,14 @@
     "auth_failed": "Vito kumbe phaswedi a swi lulamanga.",
     "auth_demo_hint": "Linga demo: <code>demo</code> / <code>spazi2026</code>",
     "auth_signed_in_as": "U nghene tani hi",
-    "auth_signout_btn": "Huma"
+    "auth_signout_btn": "Huma",
+    "footer_ai_disclaimer": "⚠️ AI yi nga endla swihoxo — tiyiseka minkarhi hinkwayo u nga si endla nchumu.",
+    "footer_terms_link": "Milawu na Swiyimo",
+    "footer_terms_title": "Milawu na Swiyimo",
+    "footer_tos_link": "Milawu na Swilaveko",
+    "help_faq_section": "Swivutiso leswi vutisiwaka kahle",
+    "help_email_support_btn": "📧 Rhumela thikiti #{id} eka mpfuno",
+    "help_email_all_btn": "📧 Rhumela tithikiti hinkwato eka mpfuno",
+    "tos_body": "These tools provide AI-assisted suggestions based on the inputs you enter. The recommender is rule-based, runs locally, and **does not constitute financial, legal, or tax advice**. spazi shops makes no warranty regarding the accuracy of pricing benchmarks, supplier patterns, or recommendations — verify against your local market before acting.\n\n**Data**: tickets, sales logs, purchase logs and ledger entries are session-scoped and reset when you sign out or refresh. Use the CSV exports to keep your own records.\n\n**Support**: emailing a ticket opens your own mail client — the message is sent under your email identity, not ours.\n\nBy using this app you agree that spazi shops, its maintainers, and the IEB TechWays AI Hackathon organisers are not liable for any business outcome resulting from use of the app."
   }
 }
