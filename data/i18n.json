@@ -3,19 +3,16 @@
     "language_label": "Language",
     "tagline_primary": "Better decisions today.",
     "tagline_secondary": "Banking tomorrow.",
-
     "sidebar_shop_details": "Shop details",
     "sidebar_shop_name": "Shop name",
     "sidebar_location": "Location",
     "sidebar_about_title": "About iSpaza",
     "sidebar_about_body": "**iSpaza helps you:**\n\n1. **Decide** what to restock, what to reprice, and what new product to try.\n2. **Plan** which day to be at which supplier (Sasko, Coca-Cola depot, the Simba rep, Jumbo Cash & Carry).\n3. **Track** daily profit per product so you know exactly which lines pay the rent.\n4. **Browse** the catalogue and add new products to your stock with one click.",
     "sidebar_caption": "Built for the IEB TechWays AI Hackathon 2026.",
-
     "tab_advice": "💡 Get Advice",
     "tab_profit": "💰 Profit Tracker",
     "tab_delivery": "🚚 Delivery & Purchasing",
     "tab_browse": "🛍️ Browse Products",
-
     "advice_subhead": "Tell iSpaza what's on your shelves and what sold last week",
     "advice_stock_label": "📦 Current Stock",
     "advice_stock_caption": "What's on your shelves right now.",
@@ -35,14 +32,12 @@
     "advice_no_section": "_No content returned for this section._",
     "advice_no_actions": "No actions — add stock and sales data and click _Get advice_.",
     "advice_download_quick": "⬇️ Download these actions (CSV)",
-
     "qa_dir_increase": "⬆️ Increase",
     "qa_dir_decrease": "⬇️ Decrease",
     "qa_dir_hold": "⏸️ Hold",
     "qa_adjust_stock": "Stock",
     "qa_adjust_price": "Price",
     "qa_adjust_none": "—",
-
     "col_product": "Product",
     "col_action": "Action",
     "col_adjust": "Adjust",
@@ -81,14 +76,12 @@
     "col_range": "Range",
     "col_pack_size": "Pack size",
     "col_complements": "Complements",
-
     "schedule_mode_auto": "Auto",
     "schedule_mode_manual": "Manual",
     "schedule_mode_skip": "Skip",
     "schedule_mode_help": "Auto = use the supplier's best day · Manual = pick your own date · Skip = drop from totals",
     "schedule_date_help": "When you're actually going to buy this. Manual edits switch the schedule to Manual.",
     "schedule_auto_date_help": "Supplier's next best day.",
-
     "profit_subhead": "Profit Tracker — what your shop is actually earning",
     "profit_kpi_revenue": "Revenue (R)",
     "profit_kpi_cost": "Cost of goods (R)",
@@ -112,7 +105,6 @@
     "profit_purchase_log_caption": "Every stock-in event — track what you paid and to whom.",
     "profit_download_sales": "⬇️ Sales log (CSV)",
     "profit_download_purchases": "⬇️ Purchase log (CSV)",
-
     "delivery_subhead": "Delivery & Purchasing — what to buy, where, and when",
     "delivery_banner": "📅 <strong>This week's plan</strong> below combines your live stock / sales numbers with realistic supplier patterns for Gauteng townships. Each line auto-schedules to the supplier's best day — switch to <em>Manual</em> to pick your own date or <em>Skip</em> to drop it. The grand total includes stock outlay <strong>plus</strong> transport (R0 for direct delivery, ~R80 per Jumbo Cash &amp; Carry trip).",
     "delivery_section_plan": "This week's purchase plan",
@@ -137,7 +129,6 @@
     "delivery_min_order_none": "no minimum",
     "delivery_min_order_value": "R{value:.0f} minimum",
     "delivery_today_marker": " (today)",
-
     "browse_subhead": "Browse Products — pick something to add to your stock",
     "browse_banner": "🛍️ The catalogue covers <strong>{count} products</strong> across {cats} categories, each with cost price, township median price, margin, supplier, and best purchase day. Click <em>Add to my stock</em> on any card and the product appears on the <em>Get Advice</em> tab.",
     "browse_search_label": "Search products, suppliers, or categories",
@@ -154,7 +145,6 @@
     "browse_card_supplier": "Supplier: {supplier}",
     "browse_card_best_pack": "Best day: {best_day} · pack of {pack_size}",
     "browse_full_table": "📋 Full catalogue table",
-
     "tab_help": "🆘 Help & Reports",
     "advice_report_problem": "🚩 Report a problem with this advice",
     "report_default_subject": "Issue with iSpaza advice",
@@ -185,27 +175,37 @@
     "help_cat_other": "Other",
     "help_toast_submitted": "Ticket #{id} submitted.",
     "help_subject_required": "Subject is required.",
-
-    "footer": "iSpaza · Built for the IEB TechWays AI Hackathon 2026 · Team Grade 10"
+    "footer": "iSpaza · Built for the IEB TechWays AI Hackathon 2026 · Team Grade 10",
+    "profit_current_stock_sales_section": "Current stock & last week's sales",
+    "profit_current_stock_sales_caption": "Edit here or on the Get Advice tab — both views share the same data.",
+    "auth_signin_title": "Sign in",
+    "auth_signin_subtitle": "Better decisions today. Banking tomorrow.",
+    "auth_signup_title": "Create an account",
+    "auth_username": "Username",
+    "auth_password": "Password",
+    "auth_signin_btn": "Sign in",
+    "auth_create_account_btn": "Create account",
+    "auth_have_account": "Already have an account? Sign in",
+    "auth_need_account": "Don't have an account? Create one",
+    "auth_failed": "Username or password is wrong.",
+    "auth_demo_hint": "Demo account: <code>demo</code> / <code>spaza2026</code>",
+    "auth_signed_in_as": "Signed in as",
+    "auth_signout_btn": "Sign out"
   },
-
   "zu": {
     "language_label": "Ulimi",
     "tagline_primary": "Izinqumo ezingcono namuhla.",
     "tagline_secondary": "Ibhange kusasa.",
-
     "sidebar_shop_details": "Imininingwane yesitolo",
     "sidebar_shop_name": "Igama lesitolo",
     "sidebar_location": "Indawo",
     "sidebar_about_title": "Mayelana ne-iSpaza",
     "sidebar_about_body": "**i-iSpaza ikusiza ngokuthi:**\n\n1. **Nquma** ukuthi yini ozoyithenga futhi, yini ozoyishintsha inani, futhi yimuphi umkhiqizo omusha ongawuzama.\n2. **Hlela** ukuthi usuku luphi ozoba kuwo umthumeli (uSasko, idiphothi yeCoca-Cola, ummeleli weSimba, iJumbo Cash & Carry).\n3. **Landela** inzuzo yansuku zonke ngomkhiqizo ngamunye ukuze wazi kahle ukuthi yimuphi umkhiqizo okhokha irenti.\n4. **Buka** ikhathalogu futhi wengeze imikhiqizo emisha esitokweni sakho ngokuchofoza okukodwa.",
     "sidebar_caption": "Yakhelwe i-IEB TechWays AI Hackathon ka-2026.",
-
     "tab_advice": "💡 Thola Iseluleko",
     "tab_profit": "💰 Isilandeli Senzuzo",
     "tab_delivery": "🚚 Ukuhanjiswa Nokuthenga",
     "tab_browse": "🛍️ Buka Imikhiqizo",
-
     "advice_subhead": "Tshela i-iSpaza ukuthi yini esemashelofini akho nokuthi yini edayisiwe ngeviki edlule",
     "advice_stock_label": "📦 Isitokwe Samanje",
     "advice_stock_caption": "Yini esemashelofini akho njengamanje.",
@@ -225,14 +225,12 @@
     "advice_no_section": "_Akukho okutholakele kulesi sigaba._",
     "advice_no_actions": "Azikho izenzo — engeza idatha yesitokwe nokudayisa bese uchofoza _Thola iseluleko_.",
     "advice_download_quick": "⬇️ Landa lezi zenzo (CSV)",
-
     "qa_dir_increase": "⬆️ Khulisa",
     "qa_dir_decrease": "⬇️ Nciphisa",
     "qa_dir_hold": "⏸️ Bamba",
     "qa_adjust_stock": "Isitokwe",
     "qa_adjust_price": "Inani",
     "qa_adjust_none": "—",
-
     "col_product": "Umkhiqizo",
     "col_action": "Isenzo",
     "col_adjust": "Lungisa",
@@ -271,14 +269,12 @@
     "col_range": "Ububanzi",
     "col_pack_size": "Usayizi wepakhi",
     "col_complements": "Okuhambisanayo",
-
     "schedule_mode_auto": "Okuzenzakalelayo",
     "schedule_mode_manual": "Ngesandla",
     "schedule_mode_skip": "Yeqa",
     "schedule_mode_help": "Okuzenzakalelayo = sebenzisa usuku oluhle lomthumeli · Ngesandla = khetha usuku lwakho · Yeqa = susa kusamba",
     "schedule_date_help": "Ngempela uzokuthenga nini lokhu. Ukushintshwa ngesandla kushintsha uhlelo lube ngeSandla.",
     "schedule_auto_date_help": "Usuku oluhle olulandelayo lomthumeli.",
-
     "profit_subhead": "Isilandeli Senzuzo — yini isitolo sakho esiyizuzayo ngempela",
     "profit_kpi_revenue": "Imali engenayo (R)",
     "profit_kpi_cost": "Izindleko zempahla (R)",
@@ -302,7 +298,6 @@
     "profit_purchase_log_caption": "Konke ukungena kwesitokwe — landela ukuthi ukhokhe malini nakubani.",
     "profit_download_sales": "⬇️ Ilogi yokudayisa (CSV)",
     "profit_download_purchases": "⬇️ Ilogi yokuthenga (CSV)",
-
     "delivery_subhead": "Ukuhanjiswa Nokuthenga — yini ozoyithenga, kuphi, nokuthi nini",
     "delivery_banner": "📅 <strong>Uhlelo lwale viki</strong> oluseduze luhlanganisa amanani akho asebenzayo esitokwe / ukudayisa namaphethini omthumeli wamatauni aseGauteng. Umugqa ngamunye uhlela ngokuzenzakalelayo osukwini oluhle lomthumeli — shintshela ku-<em>Ngesandla</em> ukuze ukhethe usuku lwakho noma <em>Yeqa</em> ukulisusa. Isamba esikhulu sihlanganisa izindleko zesitokwe <strong>kuhlanganise</strong> nokuthuthwa (R0 ngokuhanjiswa okuqondile, ~R80 ngohambo lwe-Jumbo Cash &amp; Carry).",
     "delivery_section_plan": "Uhlelo lokuthenga lwale viki",
@@ -327,7 +322,6 @@
     "delivery_min_order_none": "ayikho i-minimum",
     "delivery_min_order_value": "okungenani u-R{value:.0f}",
     "delivery_today_marker": " (namuhla)",
-
     "browse_subhead": "Buka Imikhiqizo — khetha okuthile okuzokwengezwa esitokweni sakho",
     "browse_banner": "🛍️ Ikhathalogu ifaka <strong>{count} imikhiqizo</strong> kuzigaba ezingu-{cats}, ngakunye nenani lezindleko, inani eliphakathi laselokishini, imejini, umthumeli, kanye nosuku oluhle lokuthenga. Chofoza <em>Engeza esitokweni sami</em> kunoma yiliphi ikhadi futhi umkhiqizo uzovela kuthebhu ye-<em>Thola Iseluleko</em>.",
     "browse_search_label": "Sesha imikhiqizo, abathumeli, noma izigaba",
@@ -344,7 +338,6 @@
     "browse_card_supplier": "Umthumeli: {supplier}",
     "browse_card_best_pack": "Usuku oluhle: {best_day} · iphakethe lika-{pack_size}",
     "browse_full_table": "📋 Ithebula eligcwele lekhathalogu",
-
     "tab_help": "🆘 Usizo Nemibiko",
     "advice_report_problem": "🚩 Bika inkinga ngalesi seluleko",
     "report_default_subject": "Inkinga ngeseluleko se-iSpaza",
@@ -375,27 +368,37 @@
     "help_cat_other": "Okunye",
     "help_toast_submitted": "Ithikithi #{id} lithunyelwe.",
     "help_subject_required": "Isihloko siyadingeka.",
-
-    "footer": "iSpaza · Yakhelwe i-IEB TechWays AI Hackathon ka-2026 · iThimba leBanga le-10"
+    "footer": "iSpaza · Yakhelwe i-IEB TechWays AI Hackathon ka-2026 · iThimba leBanga le-10",
+    "profit_current_stock_sales_section": "Isitokwe samanje nokudayisa kweviki edlule",
+    "profit_current_stock_sales_caption": "Hlela lapha noma kuthebhu ye-Thola Iseluleko — kokubili kuhambisana nedatha efanayo.",
+    "auth_signin_title": "Ngena",
+    "auth_signin_subtitle": "Izinqumo ezingcono namuhla. Ibhange kusasa.",
+    "auth_signup_title": "Dala i-akhawunti",
+    "auth_username": "Igama lomsebenzisi",
+    "auth_password": "Iphasiwedi",
+    "auth_signin_btn": "Ngena",
+    "auth_create_account_btn": "Dala i-akhawunti",
+    "auth_have_account": "Usunesakhawunti? Ngena",
+    "auth_need_account": "Awunayo i-akhawunti? Dala enye",
+    "auth_failed": "Igama lomsebenzisi noma iphasiwedi ayilungile.",
+    "auth_demo_hint": "I-akhawunti yedemo: <code>demo</code> / <code>spaza2026</code>",
+    "auth_signed_in_as": "Ungene njenge",
+    "auth_signout_btn": "Phuma"
   },
-
   "xh": {
     "language_label": "Ulwimi",
     "tagline_primary": "Izigqibo ezingcono namhlanje.",
     "tagline_secondary": "Ibhanki ngomso.",
-
     "sidebar_shop_details": "Iinkcukacha zevenkile",
     "sidebar_shop_name": "Igama levenkile",
     "sidebar_location": "Indawo",
     "sidebar_about_title": "Malunga ne-iSpaza",
     "sidebar_about_body": "**i-iSpaza ikunceda ngokuthi:**\n\n1. **Yenza isigqibo** soko unokukuthenga kwakhona, yintoni emawuyitshintshe ngexabiso, neyiphi imveliso entsha onokuyizama.\n2. **Cwangcisa** ukuba usuku luphi onokuba kwababoneleli (Sasko, idepho yeCoca-Cola, ummeli weSimba, Jumbo Cash & Carry).\n3. **Landela** inzuzo yemihla ngemihla ngemveliso nganye ukuze wazi yiyiphi imigca ehlawula irenti.\n4. **Khangela** ikhathalogu wongeze iimveliso ezintsha kwisitokhwe sakho ngokucofa kanye.",
     "sidebar_caption": "Yenzelwe i-IEB TechWays AI Hackathon ka-2026.",
-
     "tab_advice": "💡 Fumana iSiluleko",
     "tab_profit": "💰 Umtshini wenzuzo",
     "tab_delivery": "🚚 Ukuhanjiswa neNkqubo yokuthenga",
     "tab_browse": "🛍️ Khangela iiMveliso",
-
     "advice_subhead": "Xelela i-iSpaza ukuba yintoni esezishelfwini zakho nokuba yintoni ethengisiweyo kwiveki ephelileyo",
     "advice_stock_label": "📦 Isitokhwe Sangoku",
     "advice_stock_caption": "Yintoni esezishelfwini zakho ngoku.",
@@ -415,14 +418,12 @@
     "advice_no_section": "_Akukho mxholo ubuyileyo kweli candelo._",
     "advice_no_actions": "Akukho zenzo — yongeza idatha yesitokhwe nokuthengisa uze ucofe _Fumana isiluleko_.",
     "advice_download_quick": "⬇️ Khuphela ezi zenzo (CSV)",
-
     "qa_dir_increase": "⬆️ Yandisa",
     "qa_dir_decrease": "⬇️ Cuthisa",
     "qa_dir_hold": "⏸️ Bambelela",
     "qa_adjust_stock": "Isitokhwe",
     "qa_adjust_price": "Ixabiso",
     "qa_adjust_none": "—",
-
     "col_product": "Imveliso",
     "col_action": "Isenzo",
     "col_adjust": "Lungisa",
@@ -461,14 +462,12 @@
     "col_range": "Ubukhulu",
     "col_pack_size": "Ubukhulu bephakheji",
     "col_complements": "Okuhambelanayo",
-
     "schedule_mode_auto": "Okuzenzekelayo",
     "schedule_mode_manual": "Ngesandla",
     "schedule_mode_skip": "Tsiba",
     "schedule_mode_help": "Okuzenzekelayo = sebenzisa usuku olungcono lomboneleli · Ngesandla = khetha usuku lwakho · Tsiba = susa kwisamba",
     "schedule_date_help": "Ngokwenene uzakuthenga nini oku. Ulungiso ngesandla lutshintsha inkqubo ibe nguNgesandla.",
     "schedule_auto_date_help": "Usuku olungcono olulandelayo lomboneleli.",
-
     "profit_subhead": "Umtshini wenzuzo — yintoni ngokwenene ivenkile yakho ezuzayo",
     "profit_kpi_revenue": "Ingeniso (R)",
     "profit_kpi_cost": "Iindleko zeempahla (R)",
@@ -492,7 +491,6 @@
     "profit_purchase_log_caption": "Konke ukungena kwesitokhwe — landela ukuba uhlawule malini nakubani.",
     "profit_download_sales": "⬇️ Iincwadi zokuthengisa (CSV)",
     "profit_download_purchases": "⬇️ Iincwadi zokuthenga (CSV)",
-
     "delivery_subhead": "Ukuhanjiswa neNkqubo yokuthenga — yintoni ozakuyithenga, phi, nanini",
     "delivery_banner": "📅 <strong>Isicwangciso sale veki</strong> apha ngezantsi sidibanisa amanani akho asebenzayo esitokhwe / ukuthengisa kunye namaphethini wababoneleli wamabhulorho aseGauteng. Umgca ngamnye ucwangcisa ngokwenzekelayo kusuku olungcono lomboneleli — tshintshela ku-<em>Ngesandla</em> ukukhetha usuku lwakho okanye <em>Tsiba</em> ukuze ulisuse. Isamba esikhulu sidibanisa iindleko zesitokhwe <strong>kuquka</strong> nezothutho (R0 ngokuhanjiswa ngqo, ~R80 ngohambo lwe-Jumbo Cash &amp; Carry).",
     "delivery_section_plan": "Isicwangciso sokuthenga kwale veki",
@@ -517,7 +515,6 @@
     "delivery_min_order_none": "akukho minimum",
     "delivery_min_order_value": "okungenani u-R{value:.0f}",
     "delivery_today_marker": " (namhlanje)",
-
     "browse_subhead": "Khangela iiMveliso — khetha into yokongeza kwisitokhwe sakho",
     "browse_banner": "🛍️ Ikhathalogu ibandakanya <strong>{count} iimveliso</strong> kwiindidi ezingama-{cats}, ngalunye nexabiso leendleko, ixabiso eliphakathi lasebhulorho, umda, umboneleli, kunye nosuku olungcono lokuthenga. Cofa <em>Yongeza kwisitokhwe sam</em> kwiyiphi na ikhadi yaye imveliso iya kuvela kuthebhu ye-<em>Fumana iSiluleko</em>.",
     "browse_search_label": "Khangela iimveliso, ababoneleli, okanye iindidi",
@@ -534,7 +531,6 @@
     "browse_card_supplier": "Umboneleli: {supplier}",
     "browse_card_best_pack": "Usuku olungcono: {best_day} · iphakheji yama-{pack_size}",
     "browse_full_table": "📋 Itheyibhile epheleleyo yekhathalogu",
-
     "tab_help": "🆘 Uncedo Neengxelo",
     "advice_report_problem": "🚩 Xela ingxaki nale cebo",
     "report_default_subject": "Ingxaki ngecebo le-iSpaza",
@@ -565,27 +561,37 @@
     "help_cat_other": "Okunye",
     "help_toast_submitted": "Itikiti #{id} lingenisiwe.",
     "help_subject_required": "Isihloko siyafuneka.",
-
-    "footer": "iSpaza · Yenzelwe i-IEB TechWays AI Hackathon ka-2026 · Iqela leBanga le-10"
+    "footer": "iSpaza · Yenzelwe i-IEB TechWays AI Hackathon ka-2026 · Iqela leBanga le-10",
+    "profit_current_stock_sales_section": "Isitokhwe sangoku nokuthengisa kweveki ephelileyo",
+    "profit_current_stock_sales_caption": "Hlela apha okanye kwithebhu ye-Fumana iSiluleko — zombini iindlela zabelana ngedatha enye.",
+    "auth_signin_title": "Ngena",
+    "auth_signin_subtitle": "Izigqibo ezingcono namhlanje. Ibhanki ngomso.",
+    "auth_signup_title": "Yenza iakhawunti",
+    "auth_username": "Igama lomsebenzisi",
+    "auth_password": "Iphaswedi",
+    "auth_signin_btn": "Ngena",
+    "auth_create_account_btn": "Yenza iakhawunti",
+    "auth_have_account": "Sele unayo iakhawunti? Ngena",
+    "auth_need_account": "Akukho akhawunti? Yenza enye",
+    "auth_failed": "Igama okanye iphaswedi ayichanekanga.",
+    "auth_demo_hint": "Iakhawunti yedemo: <code>demo</code> / <code>spaza2026</code>",
+    "auth_signed_in_as": "Ungene njenge",
+    "auth_signout_btn": "Phuma"
   },
-
   "af": {
     "language_label": "Taal",
     "tagline_primary": "Beter besluite vandag.",
     "tagline_secondary": "Banke môre.",
-
     "sidebar_shop_details": "Winkelbesonderhede",
     "sidebar_shop_name": "Winkelnaam",
     "sidebar_location": "Ligging",
     "sidebar_about_title": "Oor iSpaza",
     "sidebar_about_body": "**iSpaza help jou:**\n\n1. **Besluit** wat om terug op die rakke te sit, wat om te herprys, en watter nuwe produk om te probeer.\n2. **Beplan** watter dag jy by watter verskaffer moet wees (Sasko, Coca-Cola-depot, die Simba-verteenwoordiger, Jumbo Cash & Carry).\n3. **Volg** daaglikse wins per produk sodat jy presies weet watter lyne die huur betaal.\n4. **Blaai** deur die katalogus en voeg nuwe produkte by jou voorraad met een klik.",
     "sidebar_caption": "Gebou vir die IEB TechWays AI Hackathon 2026.",
-
     "tab_advice": "💡 Kry Advies",
     "tab_profit": "💰 Winsmonitor",
     "tab_delivery": "🚚 Aflewering & Aankope",
     "tab_browse": "🛍️ Blaai Produkte",
-
     "advice_subhead": "Vertel iSpaza wat op jou rakke is en wat verlede week verkoop het",
     "advice_stock_label": "📦 Huidige Voorraad",
     "advice_stock_caption": "Wat tans op jou rakke is.",
@@ -605,14 +611,12 @@
     "advice_no_section": "_Geen inhoud vir hierdie afdeling teruggegee nie._",
     "advice_no_actions": "Geen aksies nie — voeg voorraad- en verkoopsdata by en klik _Kry advies_.",
     "advice_download_quick": "⬇️ Laai hierdie aksies af (CSV)",
-
     "qa_dir_increase": "⬆️ Verhoog",
     "qa_dir_decrease": "⬇️ Verlaag",
     "qa_dir_hold": "⏸️ Hou",
     "qa_adjust_stock": "Voorraad",
     "qa_adjust_price": "Prys",
     "qa_adjust_none": "—",
-
     "col_product": "Produk",
     "col_action": "Aksie",
     "col_adjust": "Verstel",
@@ -651,14 +655,12 @@
     "col_range": "Reeks",
     "col_pack_size": "Pakgrootte",
     "col_complements": "Komplemente",
-
     "schedule_mode_auto": "Outo",
     "schedule_mode_manual": "Handmatig",
     "schedule_mode_skip": "Slaan oor",
     "schedule_mode_help": "Outo = gebruik die verskaffer se beste dag · Handmatig = kies jou eie datum · Slaan oor = uitsluit van totale",
     "schedule_date_help": "Wanneer jy dit werklik gaan koop. Handmatige veranderinge skakel die skedule oor na Handmatig.",
     "schedule_auto_date_help": "Verskaffer se volgende beste dag.",
-
     "profit_subhead": "Winsmonitor — wat jou winkel werklik verdien",
     "profit_kpi_revenue": "Inkomste (R)",
     "profit_kpi_cost": "Goedere koste (R)",
@@ -682,7 +684,6 @@
     "profit_purchase_log_caption": "Elke voorraad-in gebeurtenis — volg wat jy betaal het en aan wie.",
     "profit_download_sales": "⬇️ Verkope-rekord (CSV)",
     "profit_download_purchases": "⬇️ Aankope-rekord (CSV)",
-
     "delivery_subhead": "Aflewering & Aankope — wat om te koop, waar, en wanneer",
     "delivery_banner": "📅 <strong>Hierdie week se plan</strong> hieronder kombineer jou lewendige voorraad / verkoopsyfers met realistiese verskafferspatrone vir Gauteng-townships. Elke reël skeduleer outomaties na die verskaffer se beste dag — skakel oor na <em>Handmatig</em> om jou eie datum te kies of <em>Slaan oor</em> om dit weg te neem. Die groot totaal sluit voorraadkoste <strong>plus</strong> vervoer in (R0 vir direkte aflewering, ~R80 per Jumbo Cash &amp; Carry-rit).",
     "delivery_section_plan": "Hierdie week se aankoopplan",
@@ -707,7 +708,6 @@
     "delivery_min_order_none": "geen minimum",
     "delivery_min_order_value": "minstens R{value:.0f}",
     "delivery_today_marker": " (vandag)",
-
     "browse_subhead": "Blaai Produkte — kies iets om by jou voorraad by te voeg",
     "browse_banner": "🛍️ Die katalogus dek <strong>{count} produkte</strong> oor {cats} kategorieë, elk met kosprys, township-mediaanprys, marge, verskaffer, en beste koopdag. Klik <em>Voeg by my voorraad</em> op enige kaart en die produk verskyn op die <em>Kry Advies</em>-oortjie.",
     "browse_search_label": "Soek produkte, verskaffers, of kategorieë",
@@ -724,7 +724,6 @@
     "browse_card_supplier": "Verskaffer: {supplier}",
     "browse_card_best_pack": "Beste dag: {best_day} · pak van {pack_size}",
     "browse_full_table": "📋 Volle katalogustabel",
-
     "tab_help": "🆘 Hulp & Verslae",
     "advice_report_problem": "🚩 Rapporteer 'n probleem met hierdie raad",
     "report_default_subject": "Probleem met iSpaza-advies",
@@ -755,10 +754,23 @@
     "help_cat_other": "Ander",
     "help_toast_submitted": "Kaartjie #{id} ingestuur.",
     "help_subject_required": "Onderwerp word vereis.",
-
-    "footer": "iSpaza · Gebou vir die IEB TechWays AI Hackathon 2026 · Spangraad 10"
+    "footer": "iSpaza · Gebou vir die IEB TechWays AI Hackathon 2026 · Spangraad 10",
+    "profit_current_stock_sales_section": "Huidige voorraad en verlede week se verkope",
+    "profit_current_stock_sales_caption": "Wysig hier of op die Kry Advies-oortjie — albei aansigte deel dieselfde data.",
+    "auth_signin_title": "Meld aan",
+    "auth_signin_subtitle": "Beter besluite vandag. Banke môre.",
+    "auth_signup_title": "Skep 'n rekening",
+    "auth_username": "Gebruikersnaam",
+    "auth_password": "Wagwoord",
+    "auth_signin_btn": "Meld aan",
+    "auth_create_account_btn": "Skep rekening",
+    "auth_have_account": "Het reeds 'n rekening? Meld aan",
+    "auth_need_account": "Geen rekening nie? Skep een",
+    "auth_failed": "Gebruikersnaam of wagwoord is verkeerd.",
+    "auth_demo_hint": "Demo-rekening: <code>demo</code> / <code>spaza2026</code>",
+    "auth_signed_in_as": "Aangemeld as",
+    "auth_signout_btn": "Meld af"
   },
-
   "nr": {
     "language_label": "Ilimi",
     "tagline_primary": "Iinqunto ezingcono namhlanjesi.",
@@ -849,9 +861,23 @@
     "help_cat_pricing": "Idatha yamanani",
     "help_cat_delivery": "Ulwazi lokuhliswa",
     "help_cat_bug": "Iphutha le-app",
-    "help_cat_other": "Okunye"
+    "help_cat_other": "Okunye",
+    "profit_current_stock_sales_section": "Isitoko sanje nokuthengisa kweveke egadungileko",
+    "profit_current_stock_sales_caption": "Hlela lapha namkha kuthebhu ye-Thola Iseluleko — koke kuhambisana nedatha efanako.",
+    "auth_signin_title": "Ngena",
+    "auth_signin_subtitle": "Iinqunto ezingcono namhlanjesi. Ibhanki kusasa.",
+    "auth_signup_title": "Dala i-akhawunti",
+    "auth_username": "Ibizo lomsebenzisi",
+    "auth_password": "Iphasiwedi",
+    "auth_signin_btn": "Ngena",
+    "auth_create_account_btn": "Dala i-akhawunti",
+    "auth_have_account": "Usunesakhawunti? Ngena",
+    "auth_need_account": "Awunayo i-akhawunti? Dala enye",
+    "auth_failed": "Ibizo namkha iphasiwedi okuyiphutha.",
+    "auth_demo_hint": "I-akhawunti yedemo: <code>demo</code> / <code>spaza2026</code>",
+    "auth_signed_in_as": "Ungene njenge",
+    "auth_signout_btn": "Phuma"
   },
-
   "ss": {
     "language_label": "Lulwimi",
     "tagline_primary": "Tincumo letingcono lamuhla.",
@@ -942,9 +968,23 @@
     "help_cat_pricing": "Lidatha yetintengo",
     "help_cat_delivery": "Lwati lekulethwa",
     "help_cat_bug": "Liphutsa le-app",
-    "help_cat_other": "Lokunye"
+    "help_cat_other": "Lokunye",
+    "profit_current_stock_sales_section": "Sitokhwe sanyalo nekutsengiswa kwelivikwi leliphelile",
+    "profit_current_stock_sales_caption": "Hlela lapha nome kuthebhu ye-Thola Seluleko — bobabili kuhambisana nelidatha lefanayo.",
+    "auth_signin_title": "Ngena",
+    "auth_signin_subtitle": "Tincumo letingcono lamuhla. Libhange kusasa.",
+    "auth_signup_title": "Yenta i-akhawunti",
+    "auth_username": "Ligama lemsebentisi",
+    "auth_password": "Liphasiwedi",
+    "auth_signin_btn": "Ngena",
+    "auth_create_account_btn": "Yenta i-akhawunti",
+    "auth_have_account": "Sewunelosola? Ngena",
+    "auth_need_account": "Awunayo? Yenta lensha",
+    "auth_failed": "Ligama nome liphasiwedi liphutsekile.",
+    "auth_demo_hint": "I-akhawunti yedemo: <code>demo</code> / <code>spaza2026</code>",
+    "auth_signed_in_as": "Ungene njenge",
+    "auth_signout_btn": "Phuma"
   },
-
   "st": {
     "language_label": "Puo",
     "tagline_primary": "Liqeto le betere kajeno.",
@@ -1035,9 +1075,23 @@
     "help_cat_pricing": "Data ea litheko",
     "help_cat_delivery": "Tlhahisoleseding ea phano",
     "help_cat_bug": "Phoso ea app",
-    "help_cat_other": "E meng"
+    "help_cat_other": "E meng",
+    "profit_current_stock_sales_section": "Setoko sa hona joale le thekiso ya beke e fetileng",
+    "profit_current_stock_sales_caption": "Hlophisa mona kapa thebheng ya Fumana Keletso — bobeli bo arolelana data e tshwanang.",
+    "auth_signin_title": "Kena",
+    "auth_signin_subtitle": "Liqeto le betere kajeno. Banka hosane.",
+    "auth_signup_title": "Bopa akhaonto",
+    "auth_username": "Lebitso la mosebedisi",
+    "auth_password": "Phasewete",
+    "auth_signin_btn": "Kena",
+    "auth_create_account_btn": "Bopa akhaonto",
+    "auth_have_account": "O se o na le akhaonto? Kena",
+    "auth_need_account": "Ha o e na le akhaonto? Bopa e nngwe",
+    "auth_failed": "Lebitso la mosebedisi kapa phasewete e fosahetseng.",
+    "auth_demo_hint": "Akhaonto ya demo: <code>demo</code> / <code>spaza2026</code>",
+    "auth_signed_in_as": "Kene jwalo ka",
+    "auth_signout_btn": "Tswa"
   },
-
   "nso": {
     "language_label": "Polelo",
     "tagline_primary": "Diphetho tše kaone lehono.",
@@ -1128,9 +1182,23 @@
     "help_cat_pricing": "Datha ya ditheko",
     "help_cat_delivery": "Tshedimošo ya tlišo",
     "help_cat_bug": "Phošo ya app",
-    "help_cat_other": "Tše dingwe"
+    "help_cat_other": "Tše dingwe",
+    "profit_current_stock_sales_section": "Setoko sa bjale le direkišo tša beke e fetilego",
+    "profit_current_stock_sales_caption": "Lokiša mo goba kha thebete ya Hwetša Keletšo — ka bobedi ba abelana datha e swanago.",
+    "auth_signin_title": "Tsena",
+    "auth_signin_subtitle": "Diphetho tše kaone lehono. Panka gosasa.",
+    "auth_signup_title": "Bopa akhaonto",
+    "auth_username": "Leina la mošomiši",
+    "auth_password": "Phasewete",
+    "auth_signin_btn": "Tsena",
+    "auth_create_account_btn": "Bopa akhaonto",
+    "auth_have_account": "O na le akhaonto? Tsena",
+    "auth_need_account": "Ga o na akhaonto? Bopa ye nngwe",
+    "auth_failed": "Leina la mošomiši goba phasewete e fošagetšego.",
+    "auth_demo_hint": "Akhaonto ya demo: <code>demo</code> / <code>spaza2026</code>",
+    "auth_signed_in_as": "O tsene bjalo ka",
+    "auth_signout_btn": "Tšwa"
   },
-
   "tn": {
     "language_label": "Puo",
     "tagline_primary": "Ditshwetso tse botoka gompieno.",
@@ -1221,9 +1289,23 @@
     "help_cat_pricing": "Dataa ya ditlhwatlhwa",
     "help_cat_delivery": "Tshedimosetso ya phano",
     "help_cat_bug": "Phoso ya app",
-    "help_cat_other": "Tse dingwe"
+    "help_cat_other": "Tse dingwe",
+    "profit_current_stock_sales_section": "Setoko sa gompieno le dithekiso tsa beke e e fetileng",
+    "profit_current_stock_sales_caption": "Fetola fa kgotsa mo thebethe ya Bona Kgakololo — boobedi bo na le data e e tshwanang.",
+    "auth_signin_title": "Tsena",
+    "auth_signin_subtitle": "Ditshwetso tse botoka gompieno. Banka kamoso.",
+    "auth_signup_title": "Tlhama akhaonto",
+    "auth_username": "Leina la modirisi",
+    "auth_password": "Phasewete",
+    "auth_signin_btn": "Tsena",
+    "auth_create_account_btn": "Tlhama akhaonto",
+    "auth_have_account": "O na le akhaonto? Tsena",
+    "auth_need_account": "Ga o na akhaonto? Tlhama e nngwe",
+    "auth_failed": "Leina la modirisi kgotsa phasewete e e fosagetseng.",
+    "auth_demo_hint": "Akhaonto ya demo: <code>demo</code> / <code>spaza2026</code>",
+    "auth_signed_in_as": "O tsene jaaka",
+    "auth_signout_btn": "Tswa"
   },
-
   "ve": {
     "language_label": "Luambo",
     "tagline_primary": "Phetho dzavhuḓi ṋamusi.",
@@ -1314,9 +1396,23 @@
     "help_cat_pricing": "Data ya mitengo",
     "help_cat_delivery": "Mafhungo a u ḓisa",
     "help_cat_bug": "Vhukhakhi ha app",
-    "help_cat_other": "Zwiṅwe"
+    "help_cat_other": "Zwiṅwe",
+    "profit_current_stock_sales_section": "Sitokho sa zwino na mirengiselo ya vhege yo fhiraho",
+    "profit_current_stock_sales_caption": "Lugisa fhano kana kha tabu ya Wana Nyeletšhedzo — dziṅwe dzi shumisa data dzo fanaho.",
+    "auth_signin_title": "Dzhena",
+    "auth_signin_subtitle": "Phetho dzavhuḓi ṋamusi. Bannga matshelo.",
+    "auth_signup_title": "Sika akhaunto",
+    "auth_username": "Dzina ḽa mushumisi",
+    "auth_password": "Phasiwedi",
+    "auth_signin_btn": "Dzhena",
+    "auth_create_account_btn": "Sika akhaunto",
+    "auth_have_account": "Vha na akhaunto? Dzhena",
+    "auth_need_account": "A ni na akhaunto? Sika iṅwe",
+    "auth_failed": "Dzina ḽa mushumisi kana phasiwedi a zwo lugi.",
+    "auth_demo_hint": "Akhaunto ya demo: <code>demo</code> / <code>spaza2026</code>",
+    "auth_signed_in_as": "No dzhena sa",
+    "auth_signout_btn": "Bvela"
   },
-
   "ts": {
     "language_label": "Ririmi",
     "tagline_primary": "Switsongoselo leswinene namuntlha.",
@@ -1407,6 +1503,21 @@
     "help_cat_pricing": "Datara ya tinxavo",
     "help_cat_delivery": "Vutivi bya ku tisa",
     "help_cat_bug": "Xihoxo xa app",
-    "help_cat_other": "Swin'wana"
+    "help_cat_other": "Swin'wana",
+    "profit_current_stock_sales_section": "Xitoko xa sweswi na mihangalano ya vhiki leri hundzeke",
+    "profit_current_stock_sales_caption": "Cinca laha kumbe eka thebete ya Kuma Ndzayo — havumbirhi swi avela datara yo fana.",
+    "auth_signin_title": "Nghena",
+    "auth_signin_subtitle": "Switsongoselo leswinene namuntlha. Bangi mundzuku.",
+    "auth_signup_title": "Endla akhawunti",
+    "auth_username": "Vito ra mutirhisi",
+    "auth_password": "Phaswedi",
+    "auth_signin_btn": "Nghena",
+    "auth_create_account_btn": "Endla akhawunti",
+    "auth_have_account": "U na akhawunti? Nghena",
+    "auth_need_account": "A wu na akhawunti? Endla yin'we",
+    "auth_failed": "Vito kumbe phaswedi a swi lulamanga.",
+    "auth_demo_hint": "Akhawunti ya demo: <code>demo</code> / <code>spaza2026</code>",
+    "auth_signed_in_as": "U nghene tani hi",
+    "auth_signout_btn": "Huma"
   }
 }

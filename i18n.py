@@ -92,6 +92,12 @@ CRITICAL_KEYS = frozenset({
     "help_priority_low", "help_priority_medium", "help_priority_high",
     "help_cat_advice", "help_cat_pricing", "help_cat_delivery",
     "help_cat_bug", "help_cat_other",
+    "auth_signin_title", "auth_signup_title",
+    "auth_username", "auth_password",
+    "auth_signin_btn", "auth_create_account_btn",
+    "auth_have_account", "auth_need_account",
+    "auth_failed", "auth_signed_in_as", "auth_signout_btn",
+    "profit_current_stock_sales_section",
 })
 
 

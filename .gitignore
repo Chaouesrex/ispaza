@@ -16,3 +16,6 @@ __pycache__/
 
 # Local Claude tooling — keep launch.json local
 .claude/
+
+# Local-only user store (Streamlit Cloud uses session-state seed instead)
+data/users.json

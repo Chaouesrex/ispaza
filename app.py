@@ -38,6 +38,13 @@ from delivery import (
     upcoming_deliveries,
     weekly_schedule,
 )
+from auth import (
+    AuthError,
+    authenticate,
+    create_user,
+    load_users,
+    seed_demo_users,
+)
 from i18n import DEFAULT_LOCALE, LOCALES, t
 from support import (
     CATEGORIES,
@@ -88,57 +95,101 @@ st.set_page_config(
 PRIMARY_GREEN = "#006B3C"
 ACCENT_YELLOW = "#FFB81C"
 SOFT_BG = "#F4F6F2"
+DEEP_GREEN = "#004F2C"
 
 st.markdown(
     f"""
     <style>
+      /* ---------- Header ---------- */
       .ispaza-header {{
-        padding: 1.1rem 1.3rem;
-        border-radius: 14px;
-        background: linear-gradient(95deg, {PRIMARY_GREEN} 0%, #00854b 100%);
+        padding: 1.4rem 1.6rem;
+        border-radius: 16px;
+        background: linear-gradient(120deg, {DEEP_GREEN} 0%, {PRIMARY_GREEN} 55%, #00854b 100%);
         color: white;
-        margin-bottom: 1.2rem;
-        box-shadow: 0 4px 14px rgba(0, 107, 60, 0.18);
+        margin-bottom: 1.4rem;
+        box-shadow: 0 6px 20px rgba(0, 79, 44, 0.22);
+        position: relative;
+        overflow: hidden;
+      }}
+      .ispaza-header::after {{
+        content: "";
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(255, 184, 28, 0.18);
+        pointer-events: none;
       }}
       .ispaza-header h1 {{
         margin: 0;
-        font-size: 2.1rem;
+        font-size: 2.3rem;
         font-weight: 800;
-        letter-spacing: -0.01em;
+        letter-spacing: -0.015em;
       }}
       .ispaza-header .tagline {{
-        margin-top: 0.2rem;
-        font-size: 1rem;
-        opacity: 0.92;
+        margin-top: 0.35rem;
+        font-size: 1.05rem;
+        opacity: 0.95;
         font-weight: 400;
       }}
       .ispaza-header .tagline .accent {{
         color: {ACCENT_YELLOW};
-        font-weight: 600;
+        font-weight: 700;
       }}
+
+      /* ---------- Buttons ---------- */
       .stButton > button[kind="primary"] {{
         background-color: {PRIMARY_GREEN};
         border-color: {PRIMARY_GREEN};
         font-weight: 600;
-        padding: 0.55rem 1.1rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 107, 60, 0.15);
       }}
       .stButton > button[kind="primary"]:hover {{
-        background-color: #00854b;
-        border-color: #00854b;
+        background-color: {DEEP_GREEN};
+        border-color: {DEEP_GREEN};
+        box-shadow: 0 4px 14px rgba(0, 79, 44, 0.25);
+        transform: translateY(-1px);
+        transition: all 0.15s ease;
       }}
+
+      /* ---------- Info banners ---------- */
       .info-banner {{
         background: {SOFT_BG};
         border-left: 5px solid {PRIMARY_GREEN};
-        padding: 0.85rem 1rem;
-        border-radius: 8px;
+        padding: 0.9rem 1.1rem;
+        border-radius: 10px;
         margin-bottom: 1rem;
         font-size: 0.95rem;
       }}
       .info-banner.accent {{
         border-left-color: {ACCENT_YELLOW};
       }}
+
+      /* ---------- KPI metric cards ---------- */
+      [data-testid="stMetric"] {{
+        background: linear-gradient(135deg, #FFFFFF 0%, {SOFT_BG} 100%);
+        border: 1px solid #E5EAE3;
+        border-radius: 12px;
+        padding: 0.95rem 1.1rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      }}
+      [data-testid="stMetricValue"] {{
+        font-weight: 700;
+        color: {DEEP_GREEN};
+      }}
+      [data-testid="stMetricLabel"] {{
+        color: #5a6a5d;
+        font-size: 0.85rem;
+        letter-spacing: 0.01em;
+      }}
+
+      /* ---------- Misc ---------- */
       .confidence-line {{
-        margin-top: 0.6rem;
+        margin-top: 0.7rem;
         color: #555;
         font-size: 0.92rem;
       }}
@@ -152,14 +203,16 @@ st.markdown(
       }}
       .section-divider {{
         height: 1px;
-        background: #eee;
-        margin: 1.6rem 0 1.2rem 0;
+        background: linear-gradient(90deg, transparent, #d8e1d4, transparent);
+        margin: 1.8rem 0 1.3rem 0;
       }}
+
+      /* ---------- Catalogue cards ---------- */
       .catalog-card {{
         padding: 0.6rem 0.2rem;
       }}
       .catalog-card .price {{
-        font-size: 1.05rem;
+        font-size: 1.08rem;
         font-weight: 700;
         color: {PRIMARY_GREEN};
       }}
@@ -172,10 +225,111 @@ st.markdown(
         font-size: 0.85rem;
         margin-top: 0.2rem;
       }}
+
+      /* ---------- Status pills (tickets) ---------- */
+      .status-pill {{
+        display: inline-block;
+        padding: 0.15rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }}
+      .status-pill.open {{ background: #FFE9B3; color: #7A4F00; }}
+      .status-pill.in_progress {{ background: #CDE8FF; color: #0D4A8C; }}
+      .status-pill.resolved {{ background: #C9EAD3; color: #0C5C2B; }}
+      .priority-pill {{
+        display: inline-block;
+        padding: 0.15rem 0.55rem;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        margin-right: 0.35rem;
+      }}
+      .priority-pill.low {{ background: #ECF0EA; color: #5a6a5d; }}
+      .priority-pill.medium {{ background: #FFF1D6; color: #8a5b00; }}
+      .priority-pill.high {{ background: #FFD9D6; color: #9B1B17; }}
+
+      /* ---------- Sign-in screen ---------- */
+      .auth-shell {{
+        background: linear-gradient(160deg, {DEEP_GREEN} 0%, {PRIMARY_GREEN} 60%, #00854b 100%);
+        border-radius: 18px;
+        padding: 2.4rem 1.8rem;
+        color: white;
+        text-align: center;
+        margin: 1.2rem auto 1.5rem auto;
+        max-width: 560px;
+        box-shadow: 0 12px 36px rgba(0, 79, 44, 0.28);
+      }}
+      .auth-shell h1 {{
+        margin: 0;
+        font-size: 2.6rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }}
+      .auth-shell .auth-subtitle {{
+        margin-top: 0.45rem;
+        font-size: 1.05rem;
+        opacity: 0.92;
+      }}
+      .auth-shell .auth-subtitle .accent {{
+        color: {ACCENT_YELLOW};
+        font-weight: 700;
+      }}
+      .auth-demo-hint {{
+        background: #FFF8E1;
+        border: 1px dashed {ACCENT_YELLOW};
+        border-radius: 10px;
+        padding: 0.6rem 0.9rem;
+        font-size: 0.88rem;
+        color: #6e5300;
+        text-align: center;
+        margin-top: 0.6rem;
+      }}
+      .auth-demo-hint code {{
+        background: rgba(255, 184, 28, 0.18);
+        padding: 0.05rem 0.35rem;
+        border-radius: 4px;
+        font-weight: 600;
+      }}
+      .auth-signed-in {{
+        background: {SOFT_BG};
+        border-radius: 10px;
+        padding: 0.55rem 0.8rem;
+        font-size: 0.88rem;
+        color: #2d3a2f;
+        margin-bottom: 0.6rem;
+      }}
+      .auth-signed-in strong {{
+        color: {DEEP_GREEN};
+      }}
     </style>
     """,
     unsafe_allow_html=True,
 )
+
+# ---------------------------------------------------------------------------
+# Early session state — locale + auth must exist before the header renders
+# ---------------------------------------------------------------------------
+
+if "locale" not in st.session_state:
+    st.session_state.locale = DEFAULT_LOCALE
+
+if "users" not in st.session_state:
+    # Try to load from disk (local runs); fall back to the demo seed on cloud.
+    disk_users = load_users()
+    st.session_state.users = disk_users if disk_users else seed_demo_users()
+
+if "authenticated_user" not in st.session_state:
+    st.session_state.authenticated_user = None
+
+if "auth_mode" not in st.session_state:
+    st.session_state.auth_mode = "signin"  # or "signup"
+
+if "auth_error" not in st.session_state:
+    st.session_state.auth_error = ""
+
 
 st.markdown(
     f"""
@@ -188,6 +342,117 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+
+# ---------------------------------------------------------------------------
+# Sign-in gate — short-circuits the rest of the page when not authenticated
+# ---------------------------------------------------------------------------
+
+
+def _render_sign_in_gate() -> None:
+    """Render the login screen and call ``st.stop()`` so nothing else paints."""
+    # A small in-page language picker so non-English speakers can switch
+    # before signing in. Mirrors the one in the sidebar.
+    locale_codes = list(LOCALES.keys())
+    _, lang_col = st.columns([5, 2])
+    with lang_col:
+        st.session_state.locale = st.selectbox(
+            f"🌐 {t('language_label')}",
+            options=locale_codes,
+            format_func=lambda code: LOCALES[code],
+            index=locale_codes.index(st.session_state.locale),
+            key="locale_selector_login",
+            label_visibility="collapsed",
+        )
+
+    st.markdown(
+        f"""
+        <div class="auth-shell">
+          <h1>iSpaza</h1>
+          <div class="auth-subtitle">
+            <span class="accent">{t("auth_signin_subtitle")}</span>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    is_signup = st.session_state.auth_mode == "signup"
+    form_label = t("auth_signup_title") if is_signup else t("auth_signin_title")
+
+    left, mid, right = st.columns([1, 3, 1])
+    with mid:
+        with st.form("auth_form", border=True, clear_on_submit=False):
+            st.markdown(f"#### {form_label}")
+            username_input = st.text_input(
+                t("auth_username"),
+                key="auth_username_input",
+                autocomplete="username",
+            )
+            password_input = st.text_input(
+                t("auth_password"),
+                type="password",
+                key="auth_password_input",
+                autocomplete="current-password",
+            )
+            primary_label = (
+                t("auth_create_account_btn") if is_signup else t("auth_signin_btn")
+            )
+            submitted = st.form_submit_button(primary_label, type="primary")
+
+            if submitted:
+                if is_signup:
+                    try:
+                        st.session_state.users = create_user(
+                            st.session_state.users,
+                            username_input,
+                            password_input,
+                        )
+                        # Auto-sign-in after a successful registration.
+                        user = authenticate(
+                            st.session_state.users,
+                            username_input,
+                            password_input,
+                        )
+                        st.session_state.authenticated_user = user.username if user else None
+                        st.session_state.auth_error = ""
+                        st.rerun()
+                    except AuthError as e:
+                        st.session_state.auth_error = str(e)
+                else:
+                    user = authenticate(
+                        st.session_state.users,
+                        username_input,
+                        password_input,
+                    )
+                    if user is None:
+                        st.session_state.auth_error = t("auth_failed")
+                    else:
+                        st.session_state.authenticated_user = user.username
+                        st.session_state.auth_error = ""
+                        st.rerun()
+
+        if st.session_state.auth_error:
+            st.error(st.session_state.auth_error)
+
+        toggle_label = (
+            t("auth_have_account") if is_signup else t("auth_need_account")
+        )
+        if st.button(toggle_label, key="auth_mode_toggle", type="secondary"):
+            st.session_state.auth_mode = "signin" if is_signup else "signup"
+            st.session_state.auth_error = ""
+            st.rerun()
+
+        st.markdown(
+            f"<div class='auth-demo-hint'>{t('auth_demo_hint')}</div>",
+            unsafe_allow_html=True,
+        )
+
+    st.stop()
+
+
+if st.session_state.authenticated_user is None:
+    _render_sign_in_gate()
 
 
 # ---------------------------------------------------------------------------
@@ -211,15 +476,11 @@ def cached_catalog_df() -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------------------
-# Session state init
+# Session state init (only runs once the user is authenticated)
 # ---------------------------------------------------------------------------
 
 _today = date.today()
 _benchmarks = cached_benchmarks()
-
-# Initialise locale BEFORE any t() call so the header tagline localises on first paint.
-if "locale" not in st.session_state:
-    st.session_state.locale = DEFAULT_LOCALE
 
 if "latest_advice" not in st.session_state:
     st.session_state.latest_advice = None
@@ -278,6 +539,19 @@ with st.sidebar:
         index=locale_codes.index(st.session_state.locale),
         key="locale_selector",
     )
+
+    st.markdown(
+        "<div class='auth-signed-in'>"
+        f"{t('auth_signed_in_as')} "
+        f"<strong>{st.session_state.authenticated_user}</strong>"
+        "</div>",
+        unsafe_allow_html=True,
+    )
+    if st.button(t("auth_signout_btn"), key="signout_btn", width="stretch"):
+        st.session_state.authenticated_user = None
+        st.session_state.auth_mode = "signin"
+        st.session_state.auth_error = ""
+        st.rerun()
 
     st.divider()
 
@@ -561,6 +835,50 @@ with tab_advice:
 
 with tab_profit:
     st.subheader(t("profit_subhead"))
+
+    # ----- Quick view: current stock + last week's sales -------------------
+    # Mirrors the editors from the Get Advice tab so the owner can adjust
+    # them here without switching tabs. They write to the same session
+    # state DataFrames, so edits stay in sync across the app.
+    st.markdown(f"#### {t('profit_current_stock_sales_section')}")
+    st.caption(t("profit_current_stock_sales_caption"))
+    stock_col, sales_col = st.columns(2, gap="large")
+    with stock_col:
+        st.markdown(f"**{t('advice_stock_label')}**")
+        st.session_state.stock_df = st.data_editor(
+            st.session_state.stock_df,
+            num_rows="dynamic",
+            width="stretch",
+            hide_index=True,
+            column_config={
+                "Product": st.column_config.TextColumn(
+                    t("col_product"), required=True, width="medium"
+                ),
+                "Quantity": st.column_config.NumberColumn(
+                    t("col_quantity"), min_value=0, step=1, format="%d"
+                ),
+            },
+            key="profit_stock_editor",
+        )
+    with sales_col:
+        st.markdown(f"**{t('advice_sales_label')}**")
+        st.session_state.sales_df = st.data_editor(
+            st.session_state.sales_df,
+            num_rows="dynamic",
+            width="stretch",
+            hide_index=True,
+            column_config={
+                "Product": st.column_config.TextColumn(
+                    t("col_product"), required=True, width="medium"
+                ),
+                "Units Sold": st.column_config.NumberColumn(
+                    t("col_units_sold"), min_value=0, step=1, format="%d"
+                ),
+            },
+            key="profit_sales_editor",
+        )
+
+    st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
     sales_records = [
         Sale(
@@ -1240,17 +1558,18 @@ with tab_help:
             key=lambda x: ({"high": 0, "medium": 1, "low": 2}.get(x.priority, 99),
                            -x.created.timestamp()),
         ):
-            status_pill = status_to_label.get(tk.status, tk.status)
-            priority_pill = pri_to_label.get(tk.priority, tk.priority)
-            category_pill = cat_to_label.get(tk.category, tk.category)
+            status_label = status_to_label.get(tk.status, tk.status)
+            priority_label = pri_to_label.get(tk.priority, tk.priority)
+            category_label = cat_to_label.get(tk.category, tk.category)
             with st.container(border=True):
                 top_l, top_r = st.columns([4, 1])
                 with top_l:
                     st.markdown(
                         f"**#{tk.id} · {tk.subject}**  \n"
-                        f"<span style='color:#555;font-size:0.85rem'>"
-                        f"{category_pill} · {priority_pill} · "
-                        f"{status_pill} · {tk.created.strftime('%Y-%m-%d %H:%M')}"
+                        f"<span class='priority-pill {tk.priority}'>{priority_label}</span>"
+                        f"<span class='status-pill {tk.status}'>{status_label}</span>"
+                        f"<span style='color:#7c8a7e;font-size:0.82rem;margin-left:0.55rem'>"
+                        f"{category_label} · {tk.created.strftime('%Y-%m-%d %H:%M')}"
                         f"</span>",
                         unsafe_allow_html=True,
                     )
